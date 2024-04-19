@@ -54,8 +54,13 @@ public class SQLUtil {
                      "SELECT dateTimeOfBegining FROM ElectionsTime"
             );
             ResultSet result = statement.getResultSet();
-                              
-            return  LocalDateTime.parse(result.getString("dateTimeOfBegining"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            if(result.next()){
+                String dateString = result.getString("dateTimeOfBegining");
+                LocalDateTime date = LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                return date;
+            }
+            throw new NoElectionsException("Время начала выборов не назначено");
+            
         }
     }
     
@@ -68,8 +73,12 @@ public class SQLUtil {
                      "SELECT dateTimeOfEnding FROM ElectionsTime"
             );
             ResultSet result = statement.getResultSet();
-                              
-            return  LocalDateTime.parse(result.getString("dateTimeOfEnding"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            if(result.next()){
+                String dateString = result.getString("dateTimeOfEnding");
+                LocalDateTime date = LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                return date;
+            }
+            throw new NoElectionsException("Время конца выборов не назначено");
         }
     }
 }

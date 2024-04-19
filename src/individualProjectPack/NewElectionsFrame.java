@@ -161,8 +161,11 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                 
                     ArrayList<Candidate> candidates = FilesUtil.getCandidatesFromFiles(candidateFolderPathField.getText());
                     Elections.setNumberOfCandidates(candidates.size());
-                    for(Candidate candidate: candidates)
+                    Elections.deleteAllCandidates();
+                    for(Candidate candidate: candidates){
                         CandidateDAO.createCandidate(candidate); //Заполняем таблицу кандидатов
+                        Elections.addCandidate(candidate);
+                    }
                     dispose();
                 }   
                 else{

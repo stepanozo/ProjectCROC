@@ -47,6 +47,11 @@ public class AdminFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         voteButton.setText("Голосовать");
+        voteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                voteButtonActionPerformed(evt);
+            }
+        });
 
         newElectionsButton.setText("Новые выборы");
         newElectionsButton.addActionListener(new java.awt.event.ActionListener() {
@@ -196,6 +201,12 @@ public class AdminFrame extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_removeAdminRightsButtonActionPerformed
+
+    private void voteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voteButtonActionPerformed
+        VoteFrame voteFrame = new VoteFrame();
+        voteFrame.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_voteButtonActionPerformed
 
     /**
      * @param args the command line arguments

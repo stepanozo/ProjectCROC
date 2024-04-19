@@ -8,6 +8,7 @@ import individualProjectPack.Exceptions.*;
 import java.io.FileReader;
 import java.io.File;
 import java.io.BufferedReader;
+import java.util.*;
 /**
  *
  * @author чтепоноза
@@ -18,7 +19,7 @@ public class Candidate {
     private final String placeOfLiving;
     private final String party;
     private final String information;
-    private final int votes;
+    private int votes;
     
     public String getName(){
         return name;
@@ -37,6 +38,10 @@ public class Candidate {
     }
     public int getVotes(){
         return votes;
+    } 
+    
+    public void setVotes(int votes){
+        this.votes = votes;
     } 
     public Candidate(String name, int yearOfBirth, String placeOfLiving, String party, String information, int votes){
         this.name = name;
@@ -66,4 +71,34 @@ public class Candidate {
         }
     }
     
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this){
+            return true;
+        }
+        if(obj == null || obj.getClass() != this.getClass()){
+            return false;
+        }
+        Candidate candidate = (Candidate)obj;
+        
+        return 
+            Objects.equals(candidate.name, this.name) && 
+            candidate.yearOfBirth == this.yearOfBirth && 
+            Objects.equals(candidate.placeOfLiving, this.placeOfLiving) &&
+            Objects.equals(candidate.party, this.party) &&
+            Objects.equals(candidate.information, this.information) && 
+            candidate.votes == this.votes;
+    }
+
+    @Override
+    public int hashCode() {
+        return 
+            name.hashCode() + 
+            ((Integer)yearOfBirth).hashCode() +
+            placeOfLiving.hashCode() +
+            party.hashCode() +
+            information.hashCode() +
+            ((Integer)votes).hashCode();
+    }
 }

@@ -66,6 +66,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="&#x413;&#x43e;&#x43b;&#x43e;&#x441;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="voteButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="newElectionsButton">
       <Properties>

@@ -4,6 +4,7 @@
  */
 package individualProjectPack;
 
+import individualProjectPack.DAO.CandidateDAO;
 import java.sql.*;
 import individualProjectPack.Exceptions.*;
 import individualProjectPack.DAO.UserDAO;
@@ -55,11 +56,19 @@ public class MainClass {
 
         
        try{
-           Connection connection = DriverManager.
+            Connection connection = DriverManager.
                    getConnection("jdbc:h2:/test", "sa", "");
-               // getConnection("jdbc:h2:mem:~/test", "sa", "");
+                //getConnection("jdbc:h2:mem:~/test", "sa", "");
            
             ConnectionUtil.setConnection(connection);
+            //Это обычно не нужно. Тут мы просто криво созданные таблицы удаляем. Удалить потом.
+         /*   try{
+                TableDestroyer.dropAllTable();
+            } catch(InvalidTableDestroyException e){
+                ErrorFrame errorFrame = new ErrorFrame();
+                errorFrame.setErrorLabel(e.getMessage());
+                errorFrame.setVisible(true);
+            }*/
             
             try{
                 TableCreator.createUserTable();
@@ -74,20 +83,18 @@ public class MainClass {
             if(SQLUtil.checkIfElectionsExist()){
                 Elections.setTimeOfBegining(SQLUtil.getBeginingTime());
                 Elections.setTimeOfBegining(SQLUtil.getEndingTime());
+                Elections.setCandidates(CandidateDAO.getCandidates());
             }
             new LogInFrame().setVisible(true);
        } catch (
                InvalidInsertException |
-               NoElectionsException e){
+               NoElectionsException |
+               NoCandidatesException e){
            ErrorFrame errorFrame = new ErrorFrame();
            errorFrame.setErrorLabel(e.getMessage());
            errorFrame.setVisible(true);
        } catch (SQLException e){
            new ErrorFrame().setVisible(true);
-       }
-        
-        
-        
+       }     
     }
-    
 }

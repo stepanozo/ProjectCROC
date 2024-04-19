@@ -19,6 +19,7 @@ public class LogInFrame extends javax.swing.JFrame {
      */
     public LogInFrame() {
         initComponents();
+        connectionErrorLabel.setVisible(false);
     }
 
     /**
@@ -37,6 +38,7 @@ public class LogInFrame extends javax.swing.JFrame {
         passwordLabel = new javax.swing.JLabel();
         loginLabel = new javax.swing.JLabel();
         loginField = new javax.swing.JTextField();
+        connectionErrorLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,6 +62,8 @@ public class LogInFrame extends javax.swing.JFrame {
 
         loginField.setText("Ваш логин");
 
+        connectionErrorLabel.setText("Произошла ошибка. Выполните вход ещё раз.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -67,6 +71,7 @@ public class LogInFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(68, 68, 68)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(connectionErrorLabel)
                     .addComponent(wrongPasswordLabel)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -99,7 +104,9 @@ public class LogInFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loginButton)
                     .addComponent(registrationButton))
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(connectionErrorLabel)
+                .addGap(39, 39, 39))
         );
 
         pack();
@@ -115,6 +122,10 @@ public class LogInFrame extends javax.swing.JFrame {
         registrationFrame.setLoginFrame(this);
     }//GEN-LAST:event_registrationButtonActionPerformed
 
+    public void showConnectionErrorMessage(){
+        connectionErrorLabel.setVisible(true);
+    }
+    
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
        try{
             if(UserDAO.successfulLogIn(loginField.getText(), String.valueOf(passwordField.getPassword()))){
@@ -126,8 +137,8 @@ public class LogInFrame extends javax.swing.JFrame {
                     adminFrame.setVisible(true);
                     dispose();
                 }else{ 
-                    UserFrame userFrame = new UserFrame();
-                    userFrame.setVisible(true);
+                    VoteFrame voteFrame = new VoteFrame();
+                    voteFrame.setVisible(true);
                     dispose();
                 }
             }
@@ -155,6 +166,7 @@ public class LogInFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel connectionErrorLabel;
     private javax.swing.JButton loginButton;
     private javax.swing.JTextField loginField;
     private javax.swing.JLabel loginLabel;

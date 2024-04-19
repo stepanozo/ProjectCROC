@@ -9,12 +9,17 @@ package individualProjectPack;
  * @author чтепоноза
  */
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import individualProjectPack.TableClasses.Candidate;
 
 public class Elections {
     
     private static LocalDateTime dateTimeOfBegining;
     private static LocalDateTime dateTimeOfEnding;
     private static int numberOfCandidates;
+    
+    private static HashSet<Candidate> candidates;
+    
     
     public static int getNumberOfCandidates(){
         return numberOfCandidates;
@@ -37,6 +42,22 @@ public class Elections {
     
     public static void setTimeOfEnding(LocalDateTime newDateTimeOfEnding){
         dateTimeOfEnding = newDateTimeOfEnding;
+    }
+    
+    public static void addCandidate(Candidate candidate){
+        candidates.add(candidate);
+    }
+    
+    public static void setCandidates(HashSet<Candidate> newCandidates){
+        candidates = newCandidates;
+    }
+    
+    public static void deleteAllCandidates(){
+        candidates.clear();
+    }
+    
+    public static HashSet<Candidate>  getCandidates(){
+        return candidates;
     }
       
 }
