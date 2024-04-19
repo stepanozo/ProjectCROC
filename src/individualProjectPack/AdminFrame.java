@@ -4,6 +4,8 @@
  */
 package individualProjectPack;
 
+import individualProjectPack.DAO.*;
+import java.sql.SQLException;
 /**
  *
  * @author чтепоноза
@@ -62,6 +64,11 @@ public class AdminFrame extends javax.swing.JFrame {
 
         removeAdminRightsButton.setText("Убрать админа");
         removeAdminRightsButton.setToolTipText("");
+        removeAdminRightsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeAdminRightsButtonActionPerformed(evt);
+            }
+        });
 
         exitButton.setText("Выйти");
         exitButton.setToolTipText("");
@@ -112,11 +119,35 @@ public class AdminFrame extends javax.swing.JFrame {
         exitButton.setEnabled(false);
     }
     
+    public void notAdminAnymore(){
+         ErrorFrame errorFrame = new ErrorFrame();
+         errorFrame.setErrorLabel("У вас больше нет прав админа.");
+         errorFrame.setVisible(true);
+    }
+    
+    public void blockAdminButtons(){
+        newElectionsButton.setEnabled(false);
+        addAdminRightsButton.setEnabled(false); 
+        removeAdminRightsButton.setEnabled(false);
+    }
+    
     private void newElectionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newElectionsButtonActionPerformed
-        NewElectionsFrame newElectionsForm = new NewElectionsFrame();
-        newElectionsForm.setVisible(true);
-        newElectionsForm.setAdminFrame(this);
-        disableAllButtons();
+        try{ //Проверим, что пользователь всё ещё админ
+            if(UserDAO.checkIfAdmin(MainClass.getMyLogin())){
+                NewElectionsFrame newElectionsForm = new NewElectionsFrame();
+                newElectionsForm.setVisible(true);
+                newElectionsForm.setAdminFrame(this);
+                disableAllButtons();
+            } else {
+            blockAdminButtons();
+            notAdminAnymore();
+            }
+        } catch (SQLException e){
+                ErrorFrame errorFrame = new ErrorFrame();
+                errorFrame.setErrorLabel("Произошла SQL-ошибка.");
+                errorFrame.setVisible(true);
+        }
+           
     }//GEN-LAST:event_newElectionsButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
@@ -125,11 +156,46 @@ public class AdminFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_exitButtonActionPerformed
 
     private void addAdminRightsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAdminRightsButtonActionPerformed
-        AddAdminRightsFrame addAdminRightsFrame = new AddAdminRightsFrame();
-        addAdminRightsFrame.setVisible(true);
-        addAdminRightsFrame.setAdminFrame(this);
-        disableAllButtons();
+        
+        try{ //Проверим, что пользователь всё ещё админ
+            if(UserDAO.checkIfAdmin(MainClass.getMyLogin())){
+                AddAdminRightsFrame addAdminRightsFrame = new AddAdminRightsFrame();
+                addAdminRightsFrame.setVisible(true);
+                addAdminRightsFrame.setAdminFrame(this);
+                disableAllButtons();
+            } else {
+            blockAdminButtons();
+            notAdminAnymore();
+            }
+        } catch (SQLException e){
+                ErrorFrame errorFrame = new ErrorFrame();
+                errorFrame.setErrorLabel("Произошла SQL-ошибка.");
+                errorFrame.setVisible(true);
+        }
+        
+       
     }//GEN-LAST:event_addAdminRightsButtonActionPerformed
+
+    private void removeAdminRightsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAdminRightsButtonActionPerformed
+        try{ //Проверим, что пользователь всё ещё админ
+            if(UserDAO.checkIfAdmin(MainClass.getMyLogin())){
+                RemoveAdminRightsFrame removeAdminRightsFrame = new RemoveAdminRightsFrame();
+                removeAdminRightsFrame.setVisible(true);
+                removeAdminRightsFrame.setAdminFrame(this);
+                disableAllButtons();
+            } else {
+                blockAdminButtons();
+                notAdminAnymore();
+            }
+        } catch (SQLException e){
+                ErrorFrame errorFrame = new ErrorFrame();
+                errorFrame.setErrorLabel("Произошла SQL-ошибка.");
+                errorFrame.setVisible(true);
+        }
+        
+        
+        
+    }//GEN-LAST:event_removeAdminRightsButtonActionPerformed
 
     /**
      * @param args the command line arguments

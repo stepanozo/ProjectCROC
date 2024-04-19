@@ -129,11 +129,14 @@ public class UserDAO {
         }
     }
     
-    public static void addAdminRights(String login) throws SQLException, NoSuchUserException, AlreadyAdminException {
+    public static void setAdminRights(String login, boolean adminRights) throws SQLException, NoSuchUserException, AlreadyAdminException, NotAdminException {
         User user = findUser(login);
-        if(user.getIsAdmin())
+        if(adminRights && user.getIsAdmin())
             throw new AlreadyAdminException("Пользователь " + login + " уже админ.", login);
-        user.setIsAdmin(true);
+        if(!adminRights && !user.getIsAdmin())
+            throw new NotAdminException("Пользователь " + login + " уже не админ.", login);
+        user.setIsAdmin(adminRights);
         updateUser(user);    
     }
+    
 }

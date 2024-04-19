@@ -119,6 +119,7 @@ public class LogInFrame extends javax.swing.JFrame {
        try{
             if(UserDAO.successfulLogIn(loginField.getText(), String.valueOf(passwordField.getPassword()))){
                 
+                MainClass.setMyLogin(loginField.getText());
                 //TODO Сдесь сделать проверку, это обычный пользователь или админ
                 if(UserDAO.checkIfAdmin(loginField.getText())){
                     AdminFrame adminFrame = new AdminFrame();

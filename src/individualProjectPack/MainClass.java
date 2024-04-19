@@ -16,6 +16,15 @@ import individualProjectPack.TableClasses.User;
 public class MainClass {
     
    
+    
+    private static String myLogin;
+    
+    public static String getMyLogin(){
+        return myLogin;
+    }
+    public static void setMyLogin(String login){
+        myLogin = login;
+    }
      /**
      * @param args the command line arguments
      */

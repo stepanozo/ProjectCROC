@@ -14,6 +14,14 @@ public class Elections {
     
     private static LocalDateTime dateTimeOfBegining;
     private static LocalDateTime dateTimeOfEnding;
+    private static int numberOfCandidates;
+    
+    public static int getNumberOfCandidates(){
+        return numberOfCandidates;
+    }
+    public static void setNumberOfCandidates(int newNumberOfCandidates){
+        numberOfCandidates = newNumberOfCandidates;
+    }
     
     public static LocalDateTime getDateTimeOfBegining(){
         return dateTimeOfBegining;

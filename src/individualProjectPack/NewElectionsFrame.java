@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import individualProjectPack.Exceptions.*;
 import individualProjectPack.TableClasses.Candidate;
 import individualProjectPack.DAO.CandidateDAO;
+import individualProjectPack.DAO.UserDAO;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.time.format.DateTimeParseException;
 /**
@@ -139,28 +141,40 @@ public class NewElectionsFrame extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+    public void blockAdminButtons(){
+        startButton.setEnabled(false);
+    }
+    
+    
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-        
-        try{
-           
+          
+        try{ //Проверим, что пользователь всё ещё админ
+           if(UserDAO.checkIfAdmin(MainClass.getMyLogin())){
             
-            LocalDateTime beginTime =  LocalDateTime.parse(timeBeginField.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            LocalDateTime endTime = LocalDateTime.parse(timeEndField.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            if(endTime.isAfter(beginTime)){
+                LocalDateTime beginTime =  LocalDateTime.parse(timeBeginField.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                LocalDateTime endTime = LocalDateTime.parse(timeEndField.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                if(endTime.isAfter(beginTime)){
+
+                    SQLUtil.newTimeOfElections(beginTime, endTime);
+                    Elections.setTimeOfBegining(beginTime);
+                    Elections.setTimeOfEnding(endTime);
                 
-                SQLUtil.newTimeOfElections(beginTime, endTime);
-                Elections.setTimeOfBegining(beginTime);
-                Elections.setTimeOfEnding(endTime);
-                
-                ArrayList<Candidate> candidates = FilesUtil.getCandidatesFromFiles(candidateFolderPathField.getText());
-                for(Candidate candidate: candidates)
-                    CandidateDAO.createCandidate(candidate); //Заполняем таблицу кандидатов
-                dispose();
-            }   
-            else{
-                ErrorFrame errorFrame = new ErrorFrame();
-                errorFrame.setErrorLabel("Окончание выборов должно быть позже начала.");
-                errorFrame.setVisible(true);
+                    ArrayList<Candidate> candidates = FilesUtil.getCandidatesFromFiles(candidateFolderPathField.getText());
+                    Elections.setNumberOfCandidates(candidates.size());
+                    for(Candidate candidate: candidates)
+                        CandidateDAO.createCandidate(candidate); //Заполняем таблицу кандидатов
+                    dispose();
+                }   
+                else{
+                    ErrorFrame errorFrame = new ErrorFrame();
+                    errorFrame.setErrorLabel("Окончание выборов должно быть позже начала.");
+                    errorFrame.setVisible(true);
+                }
+            }
+            else {
+                blockAdminButtons();
+                adminFrame.blockAdminButtons();
+                adminFrame.notAdminAnymore();
             }
         } catch (DateTimeParseException e){
            ErrorFrame errorFrame = new ErrorFrame();
@@ -169,10 +183,15 @@ public class NewElectionsFrame extends javax.swing.JFrame {
         }
         catch (InvalidInsertException |
                 NoSuchFolderException |
-                UnableToReadFileException e){
+                UnableToReadFileException | 
+                TooManyCandidatesException e){
            ErrorFrame errorFrame = new ErrorFrame();
            errorFrame.setErrorLabel(e.getMessage());
            errorFrame.setVisible(true);
+        }catch (SQLException e){
+                ErrorFrame errorFrame = new ErrorFrame();
+                errorFrame.setErrorLabel("Произошла SQL-ошибка.");
+                errorFrame.setVisible(true);
         }
     }//GEN-LAST:event_startButtonActionPerformed
 
