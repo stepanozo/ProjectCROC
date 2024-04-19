@@ -40,7 +40,7 @@ public class SQLUtil {
                      "TRUNCATE TABLE Candidates "      
                     );
         }catch (SQLException E){
-            throw new InvalidTableDestroyException("Не удалось добавить новое время выборов");
+            throw new InvalidTableDestroyException("Не удалось очистить таблицу кандидатов");
         }
     }
     

@@ -129,6 +129,8 @@ public class UserDAO {
         }
     }
     
+    
+    
     public static void setAdminRights(String login, boolean adminRights) throws SQLException, NoSuchUserException, AlreadyAdminException, NotAdminException {
         User user = findUser(login);
         if(adminRights && user.getIsAdmin())
@@ -137,6 +139,17 @@ public class UserDAO {
             throw new NotAdminException("Пользователь " + login + " уже не админ.", login);
         user.setIsAdmin(adminRights);
         updateUser(user);    
+    }
+    
+    public static void forgetAllVotes() throws SQLException{
+        
+        try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
+            statement.execute(String.format(
+                            "UPDATE Users " +
+                                    "SET " +
+                                    "voted = false " 
+                    ));
+        }
     }
     
 }

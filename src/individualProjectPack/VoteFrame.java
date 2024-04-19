@@ -51,6 +51,7 @@ public class VoteFrame extends javax.swing.JFrame {
         jButton6,
         jButton7,
         };
+        Elections.setVoteFrame(this);
         int numberOfCandidates = Elections.getNumberOfCandidates();
         choice = -1;
         for(int i = MAX_CANDIDATES-1; i >= numberOfCandidates; i--){

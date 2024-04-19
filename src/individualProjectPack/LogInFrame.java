@@ -7,6 +7,7 @@ package individualProjectPack;
 
 import java.sql.*;
 import individualProjectPack.DAO.*;
+import java.time.LocalDateTime;
 /**
  *
  * @author student
@@ -137,9 +138,23 @@ public class LogInFrame extends javax.swing.JFrame {
                     adminFrame.setVisible(true);
                     dispose();
                 }else{ 
-                    VoteFrame voteFrame = new VoteFrame();
-                    voteFrame.setVisible(true);
-                    dispose();
+                    if(SQLUtil.checkIfElectionsExist() &&
+                            LocalDateTime.now().isAfter(Elections.getDateTimeOfBegining()) )
+                    {
+                        if(LocalDateTime.now().isBefore(Elections.getDateTimeOfEnding())){
+                            VoteFrame voteFrame = new VoteFrame();
+                            voteFrame.setVisible(true);
+                        } else{
+                            ElectionsResultFrame resultFrame = new ElectionsResultFrame();
+                            resultFrame.setVisible(true);
+                        }
+                        dispose();
+                    }
+                    else{
+                        InfoFrame infoFrame = new InfoFrame();
+                        infoFrame.setErrorLabel("Выборы в данный момент не проводятся");
+                        infoFrame.setVisible(true);
+                    }
                 }
             }
              wrongPasswordLabel.setText("Неверный логин или пароль");

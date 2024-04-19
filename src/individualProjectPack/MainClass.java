@@ -9,6 +9,8 @@ import java.sql.*;
 import individualProjectPack.Exceptions.*;
 import individualProjectPack.DAO.UserDAO;
 import individualProjectPack.TableClasses.User;
+import individualProjectPack.Waiter;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -19,6 +21,7 @@ public class MainClass {
    
     
     private static String myLogin;
+    private static Thread waiterThread;
     
     public static String getMyLogin(){
         return myLogin;
@@ -26,6 +29,25 @@ public class MainClass {
     public static void setMyLogin(String login){
         myLogin = login;
     }
+    public static Thread getWaiterThread(){
+        return waiterThread;
+    }
+    public static void setWaiterThread(Thread thread){
+        waiterThread = thread;
+    }
+    
+    
+    public static void clearTables(){
+             //Это обычно не нужно. Тут мы просто криво созданные таблицы удаляем. Удалить потом.
+        try{
+            TableDestroyer.dropAllTable();
+        } catch(InvalidTableDestroyException e){
+            InfoFrame errorFrame = new InfoFrame();
+            errorFrame.setErrorLabel(e.getMessage());
+            errorFrame.setVisible(true);
+        }
+    }
+   
      /**
      * @param args the command line arguments
      */
@@ -61,14 +83,7 @@ public class MainClass {
                 //getConnection("jdbc:h2:mem:~/test", "sa", "");
            
             ConnectionUtil.setConnection(connection);
-            //Это обычно не нужно. Тут мы просто криво созданные таблицы удаляем. Удалить потом.
-         /*   try{
-                TableDestroyer.dropAllTable();
-            } catch(InvalidTableDestroyException e){
-                ErrorFrame errorFrame = new ErrorFrame();
-                errorFrame.setErrorLabel(e.getMessage());
-                errorFrame.setVisible(true);
-            }*/
+       
             
             try{
                 TableCreator.createUserTable();
@@ -82,18 +97,27 @@ public class MainClass {
             
             if(SQLUtil.checkIfElectionsExist()){
                 Elections.setTimeOfBegining(SQLUtil.getBeginingTime());
-                Elections.setTimeOfBegining(SQLUtil.getEndingTime());
+                Elections.setTimeOfEnding(SQLUtil.getEndingTime());
                 Elections.setCandidates(CandidateDAO.getCandidates());
+                
+                if(Elections.getDateTimeOfEnding().isAfter(LocalDateTime.now())){
+                    //Теперь запустим ожидание конца выборов.
+                    waiterThread = new Thread(Waiter.getInstance());
+                    waiterThread.start();
+                }
             }
             new LogInFrame().setVisible(true);
+            
+            
        } catch (
                InvalidInsertException |
-               NoElectionsException |
-               NoCandidatesException e){
+               NoElectionsException e){
            InfoFrame errorFrame = new InfoFrame();
            errorFrame.setErrorLabel(e.getMessage());
            errorFrame.setVisible(true);
-       } catch (SQLException e){
+       } catch (NoCandidatesException e){
+           new InfoFrame().setVisible(true);
+       }  catch (SQLException e){
            new InfoFrame().setVisible(true);
        }     
     }

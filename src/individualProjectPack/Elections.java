@@ -11,14 +11,22 @@ package individualProjectPack;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import individualProjectPack.TableClasses.Candidate;
+import java.util.stream.Stream;
 
 public class Elections {
     
-    private static LocalDateTime dateTimeOfBegining;
-    private static LocalDateTime dateTimeOfEnding;
+    private static volatile LocalDateTime dateTimeOfBegining;
+    private static volatile LocalDateTime dateTimeOfEnding;
     
-    private static HashSet<Candidate> candidates;
+    private static HashSet<Candidate> candidates = new HashSet();
+    private static VoteFrame voteFrame; //Храним эту форму здесь, чтобы после окончания выборов её закрыть и заменить на форму результатов выборов.
     
+    public static VoteFrame getVoteFrame(){
+        return voteFrame;
+    }
+    public static void setVoteFrame(VoteFrame newVoteFrame){
+        voteFrame = newVoteFrame;
+    }
     
     public static int getNumberOfCandidates(){
         return candidates.size();
@@ -54,6 +62,20 @@ public class Elections {
     
     public static HashSet<Candidate>  getCandidates(){
         return candidates;
+    }
+    
+    public static double percentageOfVotes(Candidate candidate) {
+        int sum = candidates.stream()
+                   .mapToInt(Candidate::getVotes) // Преобразуем каждого кандидата в число голосов
+                   .sum(); // Суммируем все голоса
+
+        if(sum == 0) return 0;
+        return candidate.getVotes()* 100/ sum;
+                
+    }
+    
+    private Elections(){
+        //Конструктор-заглушка
     }
       
 }

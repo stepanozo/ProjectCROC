@@ -161,11 +161,16 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                 
                     ArrayList<Candidate> candidates = FilesUtil.getCandidatesFromFiles(candidateFolderPathField.getText());
                     Elections.deleteAllCandidates();
+                    UserDAO.forgetAllVotes();
                     SQLUtil.newCandidateTable();
                     for(Candidate candidate: candidates){
                         CandidateDAO.createCandidate(candidate); //Заполняем таблицу кандидатов
                         Elections.addCandidate(candidate);
                     }
+                    
+                    //Теперь запустим ожидание конца выборов.
+                    MainClass.setWaiterThread(new Thread(Waiter.getInstance()));
+                    MainClass.getWaiterThread().start();
                     dispose();
                 }   
                 else{

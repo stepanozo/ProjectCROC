@@ -8,6 +8,7 @@ import individualProjectPack.DAO.*;
 import individualProjectPack.Exceptions.NoSuchUserException;
 import individualProjectPack.TableClasses.*;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 /**
  *
  * @author чтепоноза
@@ -205,10 +206,29 @@ public class AdminFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_removeAdminRightsButtonActionPerformed
 
     private void voteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voteButtonActionPerformed
-
-        VoteFrame voteFrame = new VoteFrame();
-        voteFrame.setVisible(true);
-        dispose();
+        try{
+            if(SQLUtil.checkIfElectionsExist() &&
+                LocalDateTime.now().isAfter(Elections.getDateTimeOfBegining()) )
+            {
+                if(LocalDateTime.now().isBefore(Elections.getDateTimeOfEnding())){
+                    VoteFrame voteFrame = new VoteFrame();
+                    voteFrame.setVisible(true);
+                } else{
+                    ElectionsResultFrame resultFrame = new ElectionsResultFrame();
+                    resultFrame.setVisible(true);
+                    }
+                dispose();
+            }
+            else{
+                InfoFrame infoFrame = new InfoFrame();
+                infoFrame.setErrorLabel("Выборы в данный момент не проводятся");
+                infoFrame.setVisible(true);
+            }
+        } catch(SQLException e){
+                InfoFrame infoFrame = new InfoFrame();
+                infoFrame.setErrorLabel("Произошла ошибка SQL.");
+                infoFrame.setVisible(true);
+        }
     }//GEN-LAST:event_voteButtonActionPerformed
 
     /**
