@@ -63,7 +63,7 @@ public class CandidateDAO {
                 if(resultSet.next()){ //Если в результате есть хотя бы одна строка с таким логином, она нам и нужна
                     Candidate candidateResult = new Candidate(
                             resultSet.getString("name"),
-                            resultSet.getInt("yearOfBitrh"),
+                            resultSet.getInt("yearOfBirth"),
                             resultSet.getString("placeOfLiving"),
                             resultSet.getString("party"),
                             resultSet.getString("information"),
@@ -78,7 +78,7 @@ public class CandidateDAO {
         }
     }
     
-        public static Candidate updateCandidate(Candidate candidate) throws SQLException, NoSuchCandidateException {
+    public static Candidate updateCandidate(Candidate candidate) throws SQLException, NoSuchCandidateException {
 
          try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
             boolean hasResult = statement.execute(String.format(
@@ -90,12 +90,13 @@ public class CandidateDAO {
                 ResultSet resultSet = statement.getResultSet();
                 if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким именем, значит мы не можем обновить этого кандидата
                     statement.execute(String.format(
-                            "UPDATE Users " +
+                            "UPDATE Candidates " +
                                     "SET name = '%s', " +
                                     "yearOfBirth = '%s', " +
-                                    "placeOfLiving = '%s' " +
-                                    "party = '%s' " +
-                                    "information = '%s' " +
+                                    "placeOfLiving = '%s', " +
+                                    "party = '%s', " +
+                                    "information = '%s', " +
+                                    "votes = %d " +
                                     "WHERE name = '%s'",
                             candidate.getName(),
                             candidate.getYearOfBirth(),
@@ -110,6 +111,30 @@ public class CandidateDAO {
                 throw new NoSuchCandidateException("Такого кандидата нет: " + candidate.getName(), candidate.getName());
             }
             throw new SQLException();
+        }
+    }
+    
+    public static void voteForCandidate(String name) throws SQLException, NoSuchCandidateException {
+
+         try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
+            boolean hasResult = statement.execute(String.format(
+                     "SELECT * FROM Candidates " +
+                            "WHERE name = '%s'",
+                    name
+            ));
+            if (hasResult) {
+                ResultSet resultSet = statement.getResultSet();
+                if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким именем, значит мы не можем обновить этого кандидата
+                    statement.execute(String.format(
+                            "UPDATE Candidates " +
+                                    "SET votes = votes + 1 " +
+                                    "WHERE name = '%s'",
+                                    name
+                    ));
+                } else
+                    throw new NoSuchCandidateException("Такого кандидата нет: " + name, name);
+            } else
+                throw new SQLException();
         }
     }
     
@@ -141,4 +166,5 @@ public class CandidateDAO {
             throw new SQLException();
         }
     }
+    
 }

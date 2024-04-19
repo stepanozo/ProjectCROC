@@ -35,7 +35,7 @@ public class TableCreator {
             Statement statement = ConnectionUtil.getConnection().createStatement();
             statement.execute(
                     "CREATE TABLE Candidates(" +
-                            "                   name VARCHAR(255) NOT NULL," +
+                            "                   name VARCHAR(255) NOT NULL, " +
                             "                   yearOfBirth INT, " +
                             "                   placeOfLiving VARCHAR(255), " +
                             "                   party VARCHAR(255), " +

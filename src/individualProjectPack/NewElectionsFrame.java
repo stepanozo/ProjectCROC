@@ -160,8 +160,8 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                     Elections.setTimeOfEnding(endTime);
                 
                     ArrayList<Candidate> candidates = FilesUtil.getCandidatesFromFiles(candidateFolderPathField.getText());
-                    Elections.setNumberOfCandidates(candidates.size());
                     Elections.deleteAllCandidates();
+                    SQLUtil.newCandidateTable();
                     for(Candidate candidate: candidates){
                         CandidateDAO.createCandidate(candidate); //Заполняем таблицу кандидатов
                         Elections.addCandidate(candidate);
@@ -169,7 +169,7 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                     dispose();
                 }   
                 else{
-                    ErrorFrame errorFrame = new ErrorFrame();
+                    InfoFrame errorFrame = new InfoFrame();
                     errorFrame.setErrorLabel("Окончание выборов должно быть позже начала.");
                     errorFrame.setVisible(true);
                 }
@@ -180,19 +180,20 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                 adminFrame.notAdminAnymore();
             }
         } catch (DateTimeParseException e){
-           ErrorFrame errorFrame = new ErrorFrame();
+           InfoFrame errorFrame = new InfoFrame();
            errorFrame.setErrorLabel("Неверно введена дата.");
            errorFrame.setVisible(true);
         }
         catch (InvalidInsertException |
                 NoSuchFolderException |
                 UnableToReadFileException | 
-                TooManyCandidatesException e){
-           ErrorFrame errorFrame = new ErrorFrame();
+                TooManyCandidatesException |
+                InvalidTableDestroyException e){
+           InfoFrame errorFrame = new InfoFrame();
            errorFrame.setErrorLabel(e.getMessage());
            errorFrame.setVisible(true);
         }catch (SQLException e){
-                ErrorFrame errorFrame = new ErrorFrame();
+                InfoFrame errorFrame = new InfoFrame();
                 errorFrame.setErrorLabel("Произошла SQL-ошибка.");
                 errorFrame.setVisible(true);
         }

@@ -5,6 +5,8 @@
 package individualProjectPack;
 
 import individualProjectPack.DAO.*;
+import individualProjectPack.Exceptions.NoSuchUserException;
+import individualProjectPack.TableClasses.*;
 import java.sql.SQLException;
 /**
  *
@@ -125,7 +127,7 @@ public class AdminFrame extends javax.swing.JFrame {
     }
     
     public void notAdminAnymore(){
-         ErrorFrame errorFrame = new ErrorFrame();
+         InfoFrame errorFrame = new InfoFrame();
          errorFrame.setErrorLabel("У вас больше нет прав админа.");
          errorFrame.setVisible(true);
     }
@@ -148,7 +150,7 @@ public class AdminFrame extends javax.swing.JFrame {
             notAdminAnymore();
             }
         } catch (SQLException e){
-                ErrorFrame errorFrame = new ErrorFrame();
+                InfoFrame errorFrame = new InfoFrame();
                 errorFrame.setErrorLabel("Произошла SQL-ошибка.");
                 errorFrame.setVisible(true);
         }
@@ -173,7 +175,7 @@ public class AdminFrame extends javax.swing.JFrame {
             notAdminAnymore();
             }
         } catch (SQLException e){
-                ErrorFrame errorFrame = new ErrorFrame();
+                InfoFrame errorFrame = new InfoFrame();
                 errorFrame.setErrorLabel("Произошла SQL-ошибка.");
                 errorFrame.setVisible(true);
         }
@@ -193,7 +195,7 @@ public class AdminFrame extends javax.swing.JFrame {
                 notAdminAnymore();
             }
         } catch (SQLException e){
-                ErrorFrame errorFrame = new ErrorFrame();
+                InfoFrame errorFrame = new InfoFrame();
                 errorFrame.setErrorLabel("Произошла SQL-ошибка.");
                 errorFrame.setVisible(true);
         }
@@ -203,6 +205,7 @@ public class AdminFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_removeAdminRightsButtonActionPerformed
 
     private void voteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voteButtonActionPerformed
+
         VoteFrame voteFrame = new VoteFrame();
         voteFrame.setVisible(true);
         dispose();

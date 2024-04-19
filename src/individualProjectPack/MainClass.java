@@ -90,11 +90,11 @@ public class MainClass {
                InvalidInsertException |
                NoElectionsException |
                NoCandidatesException e){
-           ErrorFrame errorFrame = new ErrorFrame();
+           InfoFrame errorFrame = new InfoFrame();
            errorFrame.setErrorLabel(e.getMessage());
            errorFrame.setVisible(true);
        } catch (SQLException e){
-           new ErrorFrame().setVisible(true);
+           new InfoFrame().setVisible(true);
        }     
     }
 }

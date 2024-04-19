@@ -3,10 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package individualProjectPack;
+import individualProjectPack.DAO.CandidateDAO;
 import individualProjectPack.SQLUtil;
+import individualProjectPack.TableClasses.Candidate;
+import java.util.HashSet;
 import individualProjectPack.DAO.UserDAO;
+import individualProjectPack.TableClasses.User;
 import individualProjectPack.Exceptions.*;
 import java.sql.*;
+import javax.swing.JCheckBox;
+import javax.swing.JButton;
+import java.util.HashMap;
 
 /**
  *
@@ -14,11 +21,68 @@ import java.sql.*;
  */
 public class VoteFrame extends javax.swing.JFrame {
 
+    private final int MAX_CANDIDATES = 8;
+    private JCheckBox[] checkBoxArray;
+    private JButton[] candidateButtonsArray;
+    private int choice;
+    private HashMap<Integer, String> numberAndName;
     /**
      * Creates new form VoteFrame
      */
     public VoteFrame() {
         initComponents();
+        checkBoxArray = new JCheckBox[]{
+        jCheckBox0,
+        jCheckBox1,
+        jCheckBox2,
+        jCheckBox3,
+        jCheckBox4,
+        jCheckBox5,
+        jCheckBox6,
+        jCheckBox7
+        };
+        candidateButtonsArray = new JButton[]{
+        jButton0,
+        jButton1,
+        jButton2,
+        jButton3,
+        jButton4,
+        jButton5,
+        jButton6,
+        jButton7,
+        };
+        int numberOfCandidates = Elections.getNumberOfCandidates();
+        choice = -1;
+        for(int i = MAX_CANDIDATES-1; i >= numberOfCandidates; i--){
+            checkBoxArray[i].setVisible(false);
+            candidateButtonsArray[i].setVisible(false);
+        }
+        HashSet<Candidate> candidates = Elections.getCandidates();
+        
+        numberAndName = new HashMap();
+        int i =0;
+        for(Candidate candidate: candidates){
+            numberAndName.put(i, candidate.getName());
+            checkBoxArray[i].setText(candidate.getName());
+            i++;
+        }
+        
+        
+        try{
+            
+            User user = UserDAO.findUser(MainClass.getMyLogin());
+            if(user.getVoted())
+                voteButton.setEnabled(false);
+        } catch (NoSuchUserException e){
+            InfoFrame errorFrame = new InfoFrame();
+            errorFrame.setErrorLabel("Вас нет в базе данных");
+            errorFrame.setVisible(true);
+        } 
+        catch (SQLException e){
+            InfoFrame errorFrame = new InfoFrame();
+            errorFrame.setErrorLabel("Ошибка SQL");
+            errorFrame.setVisible(true);
+        }
     }
 
     /**
@@ -31,10 +95,11 @@ public class VoteFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         filterButton = new javax.swing.JButton();
+        jCheckBox0 = new javax.swing.JCheckBox();
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
         cancelFilter = new javax.swing.JButton();
+        jButton0 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -42,29 +107,45 @@ public class VoteFrame extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        voteButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
-        jCheckBox9 = new javax.swing.JCheckBox();
-        jCheckBox10 = new javax.swing.JCheckBox();
-        jCheckBox11 = new javax.swing.JCheckBox();
-        jCheckBox12 = new javax.swing.JCheckBox();
-        jCheckBox13 = new javax.swing.JCheckBox();
+        jCheckBox3 = new javax.swing.JCheckBox();
+        jCheckBox4 = new javax.swing.JCheckBox();
+        jCheckBox5 = new javax.swing.JCheckBox();
+        jCheckBox6 = new javax.swing.JCheckBox();
+        jCheckBox7 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         filterButton.setText("Фильтр по критериям");
         filterButton.setToolTipText("");
 
-        jCheckBox1.setSelected(true);
-        jCheckBox1.setText("Кандидат Кандидатович Кандидатов");
+        jCheckBox0.setText("jCheckBox0");
+        jCheckBox0.setToolTipText("");
+        jCheckBox0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox0ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox1.setText("jCheckBox1");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
 
         jCheckBox2.setText("jCheckBox2");
-
-        jCheckBox3.setText("jCheckBox3");
+        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox2ActionPerformed(evt);
+            }
+        });
 
         cancelFilter.setText("Сбросить фильтр");
         cancelFilter.setToolTipText("");
+
+        jButton0.setText("Информация");
 
         jButton1.setText("Информация");
 
@@ -80,9 +161,12 @@ public class VoteFrame extends javax.swing.JFrame {
 
         jButton7.setText("Информация");
 
-        jButton8.setText("Информация");
-
-        jButton9.setText("Подтвердить голос");
+        voteButton.setText("Подтвердить голос");
+        voteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                voteButtonActionPerformed(evt);
+            }
+        });
 
         cancelButton.setText("Отмена");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -91,15 +175,41 @@ public class VoteFrame extends javax.swing.JFrame {
             }
         });
 
-        jCheckBox9.setText("jCheckBox3");
+        jCheckBox3.setText("jCheckBox3");
+        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox3ActionPerformed(evt);
+            }
+        });
 
-        jCheckBox10.setText("jCheckBox3");
+        jCheckBox4.setText("jCheckBox4");
+        jCheckBox4.setToolTipText("");
+        jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox4ActionPerformed(evt);
+            }
+        });
 
-        jCheckBox11.setText("jCheckBox3");
+        jCheckBox5.setText("jCheckBox5");
+        jCheckBox5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox5ActionPerformed(evt);
+            }
+        });
 
-        jCheckBox12.setText("jCheckBox3");
+        jCheckBox6.setText("jCheckBox6");
+        jCheckBox6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox6ActionPerformed(evt);
+            }
+        });
 
-        jCheckBox13.setText("jCheckBox3");
+        jCheckBox7.setText("jCheckBox7");
+        jCheckBox7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,27 +220,27 @@ public class VoteFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBox0)
                             .addComponent(jCheckBox1)
                             .addComponent(jCheckBox2)
                             .addComponent(jCheckBox3)
-                            .addComponent(jCheckBox9)
-                            .addComponent(jCheckBox10)
-                            .addComponent(jCheckBox11)
-                            .addComponent(jCheckBox12)
-                            .addComponent(jCheckBox13))
+                            .addComponent(jCheckBox4)
+                            .addComponent(jCheckBox5)
+                            .addComponent(jCheckBox6)
+                            .addComponent(jCheckBox7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton0, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jButton8)
                                 .addComponent(jButton7)
                                 .addComponent(jButton6)
                                 .addComponent(jButton5)
-                                .addComponent(jButton4))))
+                                .addComponent(jButton4)
+                                .addComponent(jButton3))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(voteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -148,6 +258,10 @@ public class VoteFrame extends javax.swing.JFrame {
                     .addComponent(cancelFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBox0)
+                    .addComponent(jButton0))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBox1)
                     .addComponent(jButton1))
                 .addGap(18, 18, 18)
@@ -156,31 +270,27 @@ public class VoteFrame extends javax.swing.JFrame {
                     .addComponent(jButton2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox3)
-                    .addComponent(jButton3))
+                    .addComponent(jButton3)
+                    .addComponent(jCheckBox3))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4)
-                    .addComponent(jCheckBox9))
+                    .addComponent(jCheckBox4))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
-                    .addComponent(jCheckBox10))
+                    .addComponent(jCheckBox5))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton6)
-                    .addComponent(jCheckBox11))
+                    .addComponent(jCheckBox6))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton7)
-                    .addComponent(jCheckBox12))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton8)
-                    .addComponent(jCheckBox13))
+                    .addComponent(jCheckBox7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(voteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -205,6 +315,88 @@ public class VoteFrame extends javax.swing.JFrame {
             dispose();
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void selectCandidate(int numberOfCheckbox){
+         if(checkBoxArray[numberOfCheckbox].isSelected())
+            for(int i = 0; i< MAX_CANDIDATES; i++){
+                if(i!=numberOfCheckbox){
+                    checkBoxArray[i].setSelected(false);
+                }
+            }
+        choice = numberOfCheckbox;
+    }
+    
+    private void jCheckBox0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox0ActionPerformed
+        selectCandidate(0);
+    }//GEN-LAST:event_jCheckBox0ActionPerformed
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        selectCandidate(1);
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+        selectCandidate(2);
+    }//GEN-LAST:event_jCheckBox2ActionPerformed
+
+    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
+        selectCandidate(3);
+    }//GEN-LAST:event_jCheckBox3ActionPerformed
+
+    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+        selectCandidate(4);
+    }//GEN-LAST:event_jCheckBox4ActionPerformed
+
+    private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
+        selectCandidate(5);
+    }//GEN-LAST:event_jCheckBox5ActionPerformed
+
+    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
+        selectCandidate(6);
+    }//GEN-LAST:event_jCheckBox6ActionPerformed
+
+    private void jCheckBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox7ActionPerformed
+        selectCandidate(7);
+    }//GEN-LAST:event_jCheckBox7ActionPerformed
+
+    private void voteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voteButtonActionPerformed
+        if(choice == -1){
+            InfoFrame infoFrame = new InfoFrame();
+            infoFrame.setErrorLabel("Сначала выберите кандидата");
+            infoFrame.setVisible(true);
+        } else try{
+            
+            User user = UserDAO.findUser(MainClass.getMyLogin());
+            if(!user.getVoted()){
+                CandidateDAO.voteForCandidate(numberAndName.get(choice));
+                user.setVoted(true);
+                UserDAO.updateUser(user);
+                voteButton.setEnabled(false);
+                
+                InfoFrame infoFrame = new InfoFrame();
+                infoFrame.setErrorLabel("Ваш голос успешно зарегистрирован!");
+                infoFrame.setVisible(true);
+            } else {
+                InfoFrame errorFrame = new InfoFrame();
+                errorFrame.setErrorLabel("Вы уже голосовали");
+                errorFrame.setVisible(true);
+                voteButton.setEnabled(false);
+            }
+       
+        } catch (NoSuchCandidateException e){
+            InfoFrame errorFrame = new InfoFrame();
+            errorFrame.setErrorLabel(e.getMessage());
+            errorFrame.setVisible(true);
+        } catch (NoSuchUserException e){
+            InfoFrame errorFrame = new InfoFrame();
+            errorFrame.setErrorLabel("Вас нет в базе данных");
+            errorFrame.setVisible(true);
+        } 
+        catch (SQLException e){
+            InfoFrame errorFrame = new InfoFrame();
+            errorFrame.setErrorLabel("Ошибка SQL");
+            errorFrame.setVisible(true);
+        }
+    }//GEN-LAST:event_voteButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,6 +437,7 @@ public class VoteFrame extends javax.swing.JFrame {
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton cancelFilter;
     private javax.swing.JButton filterButton;
+    private javax.swing.JButton jButton0;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -252,15 +445,14 @@ public class VoteFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
+    private javax.swing.JCheckBox jCheckBox0;
     private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox10;
-    private javax.swing.JCheckBox jCheckBox11;
-    private javax.swing.JCheckBox jCheckBox12;
-    private javax.swing.JCheckBox jCheckBox13;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox9;
+    private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JCheckBox jCheckBox6;
+    private javax.swing.JCheckBox jCheckBox7;
+    private javax.swing.JButton voteButton;
     // End of variables declaration//GEN-END:variables
 }

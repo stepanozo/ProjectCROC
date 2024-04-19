@@ -8,8 +8,7 @@ import java.sql.*;
 import individualProjectPack.ConnectionUtil;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import individualProjectPack.Exceptions.InvalidInsertException;
-import individualProjectPack.Exceptions.NoElectionsException;
+import individualProjectPack.Exceptions.*;
 /**
  *
  * @author чтепоноза
@@ -31,6 +30,17 @@ public class SQLUtil {
                ));
         }catch (SQLException E){
             throw new InvalidInsertException("Не удалось добавить новое время выборов");
+        }
+    }
+    
+    public static void newCandidateTable() throws InvalidTableDestroyException{
+        
+        try (Statement statement = ConnectionUtil.getConnection().createStatement()){
+                statement.execute(
+                     "TRUNCATE TABLE Candidates "      
+                    );
+        }catch (SQLException E){
+            throw new InvalidTableDestroyException("Не удалось добавить новое время выборов");
         }
     }
     

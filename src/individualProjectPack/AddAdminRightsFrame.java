@@ -117,11 +117,11 @@ public class AddAdminRightsFrame extends javax.swing.JFrame {
                 adminFrame.notAdminAnymore();
             }
         } catch(NoSuchUserException | AlreadyAdminException | NotAdminException e){
-           ErrorFrame errorFrame = new ErrorFrame();
+           InfoFrame errorFrame = new InfoFrame();
            errorFrame.setErrorLabel(e.getMessage());
            errorFrame.setVisible(true);
         } catch(SQLException e){
-           ErrorFrame errorFrame = new ErrorFrame();
+           InfoFrame errorFrame = new InfoFrame();
            errorFrame.setErrorLabel("Ошибка SQL.");
            errorFrame.setVisible(true);
         }

@@ -16,18 +16,14 @@ public class Elections {
     
     private static LocalDateTime dateTimeOfBegining;
     private static LocalDateTime dateTimeOfEnding;
-    private static int numberOfCandidates;
     
     private static HashSet<Candidate> candidates;
     
     
     public static int getNumberOfCandidates(){
-        return numberOfCandidates;
+        return candidates.size();
     }
-    public static void setNumberOfCandidates(int newNumberOfCandidates){
-        numberOfCandidates = newNumberOfCandidates;
-    }
-    
+
     public static LocalDateTime getDateTimeOfBegining(){
         return dateTimeOfBegining;
     }
