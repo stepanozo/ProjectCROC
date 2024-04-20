@@ -64,7 +64,7 @@ public class Elections {
         return candidates;
     }
     
-    public static double percentageOfVotes(Candidate candidate) {
+    public static double percentageOfVotes(Candidate candidate, HashSet<Candidate> candidates) {
         int sum = candidates.stream()
                    .mapToInt(Candidate::getVotes) // Преобразуем каждого кандидата в число голосов
                    .sum(); // Суммируем все голоса

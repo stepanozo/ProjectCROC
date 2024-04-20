@@ -9,6 +9,8 @@ import individualProjectPack.TableClasses.User;
 import individualProjectPack.ConnectionUtil;
 import java.sql.*;
 import individualProjectPack.Hashing.MD5Hashing;
+import individualProjectPack.TableClasses.Candidate;
+import java.util.HashSet;
 /**
  *
  * @author чтепоноза
@@ -149,6 +151,34 @@ public class UserDAO {
                                     "SET " +
                                     "voted = false " 
                     ));
+        }
+    }
+    
+    public static HashSet<User> getUsers() throws NoUsersException, SQLException{
+           
+         try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
+            boolean hasResult = statement.execute(
+                    "SELECT * FROM Users "
+            );
+            if (hasResult) {
+                HashSet<User> users = new HashSet();
+                ResultSet resultSet = statement.getResultSet();
+                boolean flg = false;
+                while (resultSet.next()) {//Если в результате есть хотя бы одна строка, значит кандидаты есть.
+                    flg = true;
+                    users.add(new User(
+                            resultSet.getString("login"),
+                            resultSet.getString("passwordHash"),
+                            resultSet.getBoolean("voted"),
+                            resultSet.getBoolean("isAdmin")
+                  
+                    ));
+                }
+                if(!flg)
+                    throw new NoUsersException("Пользователей нет.");
+                else return users;
+            }
+            throw new SQLException();
         }
     }
     

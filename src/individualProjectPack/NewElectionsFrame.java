@@ -7,12 +7,16 @@ package individualProjectPack;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import individualProjectPack.Exceptions.*;
-import individualProjectPack.TableClasses.Candidate;
+import individualProjectPack.TableClasses.*;
 import individualProjectPack.DAO.CandidateDAO;
 import individualProjectPack.DAO.UserDAO;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.time.format.DateTimeParseException;
+import java.util.HashSet;
 /**
  *
  * @author чтепоноза
@@ -154,6 +158,16 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                 LocalDateTime beginTime =  LocalDateTime.parse(timeBeginField.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 LocalDateTime endTime = LocalDateTime.parse(timeEndField.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 if(endTime.isAfter(beginTime)){
+                    
+                    
+                    if(SQLUtil.checkIfElectionsExist()){ //Здесь мы должны сгрузить в файл информацию о предыдущих выборах, если они были
+
+                        if(SQLUtil.getEndingTime().isBefore(LocalDateTime.now())){
+                            //TODO ЗДЕСЬ СДЕЛАТЬ ВЫГРУЗКУ ДАННЫХ В ФАЙЛ
+                            savePreviousElections();
+                        }
+                    }
+                    
 
                     SQLUtil.newTimeOfElections(beginTime, endTime);
                     Elections.setTimeOfBegining(beginTime);
@@ -171,6 +185,8 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                     //Теперь запустим ожидание конца выборов.
                     MainClass.setWaiterThread(new Thread(Waiter.getInstance()));
                     MainClass.getWaiterThread().start();
+                    
+                    
                     dispose();
                 }   
                 else{
@@ -193,7 +209,10 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                 NoSuchFolderException |
                 UnableToReadFileException | 
                 TooManyCandidatesException |
-                InvalidTableDestroyException e){
+                InvalidTableDestroyException |
+                NoElectionsException | 
+                NoCandidatesException |
+                NoUsersException e){
            InfoFrame errorFrame = new InfoFrame();
            errorFrame.setErrorLabel(e.getMessage());
            errorFrame.setVisible(true);
@@ -208,6 +227,61 @@ public class NewElectionsFrame extends javax.swing.JFrame {
         adminFrame.enableAllButtons();
     }//GEN-LAST:event_formWindowClosed
 
+    
+    private void savePreviousElections() throws SQLException, NoElectionsException, NoCandidatesException, NoUsersException{
+        File filePath = new File("Save");
+        filePath.mkdir();
+        
+        int i = 1;
+        File file = new File(filePath + "\\Elections" + i +".txt");
+        while(file.exists()){
+            file = new File(filePath + "\\Election" + i +".txt");
+            i++;
+        }
+        try(FileWriter writer = new FileWriter(file.getPath())) {;
+            
+            writer.write("Начало выборов: " + SQLUtil.getBeginingTime().toString() + "\n");
+            writer.append("Конец выборов: " + SQLUtil.getEndingTime().toString() + "\n");
+            writer.append("Результаты выборов: \n");
+            
+            HashSet<Candidate> candidates = CandidateDAO.getCandidates();
+ 
+            for(Candidate candidate : candidates)
+                writer.append(candidate.getName() + " - " + Elections.percentageOfVotes(candidate, candidates) + "% голосов \n");
+            
+          
+            HashSet<User> users = UserDAO.getUsers();
+            
+            int sumVotes = users.stream()
+                   .mapToInt(user -> (user.getVoted()) ? 1 : 0) 
+                   .sum(); 
+            writer.append("Всего человек проголосовало " +sumVotes); 
+            writer.append('\n');
+            
+            writer.append("Явка составила: " + sumVotes* 100/users.size() + " %\n");
+            
+            writer.append("\nПриходили на выборы:\n ");
+            for(User user : users)
+                if(user.getVoted())
+                    writer.append(user.toString() + "\n");
+             
+            writer.append("\\nnУчаствовавшие кандидаты: \n\n");
+            for(Candidate candidate : candidates) {
+                writer.append(candidate.toString() + "\n\n");
+            }
+            writer.append("\n");
+             
+             
+            
+            
+            
+            writer.flush();
+        } catch (IOException e) {
+            InfoFrame errorFrame = new InfoFrame();
+           errorFrame.setErrorLabel("Не получилось создать файл");
+           errorFrame.setVisible(true);
+        } 
+    }
     
     /**
      * @param args the command line arguments

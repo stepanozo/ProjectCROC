@@ -4,6 +4,7 @@
  */
 package individualProjectPack.TableClasses;
 import individualProjectPack.Hashing.MD5Hashing;
+import java.util.Objects;
 
 /**
  *
@@ -50,4 +51,34 @@ public class User {
         this.isAdmin = isAdmin;
     }
     
+        @Override
+    public boolean equals(Object obj) {
+        if(obj == this){
+            return true;
+        }
+        if(obj == null || obj.getClass() != this.getClass()){
+            return false;
+        }
+        User user = (User)obj;
+        
+        return 
+            Objects.equals(user.login, this.login) && 
+            Objects.equals(user.passwordHash, this.passwordHash) &&
+            user.voted == this.voted && 
+            user.isAdmin == this.isAdmin;
+    }
+
+    @Override
+    public int hashCode() {
+        return 
+            login.hashCode() + 
+            passwordHash.hashCode() +
+            ((Boolean)voted).hashCode()+
+            ((Boolean)isAdmin).hashCode();
+    }
+    
+    @Override
+    public String toString(){
+        return login + (isAdmin ? ", админ" : "");
+    }
 }

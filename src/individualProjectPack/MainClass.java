@@ -11,6 +11,8 @@ import individualProjectPack.DAO.UserDAO;
 import individualProjectPack.TableClasses.User;
 import individualProjectPack.Waiter;
 import java.time.LocalDateTime;
+import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -75,7 +77,7 @@ public class MainClass {
         }
         //</editor-fold>
         //</editor-fold>
-
+ 
         
        try{
             Connection connection = DriverManager.
@@ -116,9 +118,13 @@ public class MainClass {
            errorFrame.setErrorLabel(e.getMessage());
            errorFrame.setVisible(true);
        } catch (NoCandidatesException e){
-           new InfoFrame().setVisible(true);
+           InfoFrame errorFrame = new InfoFrame();
+           errorFrame.setErrorLabel(e.getMessage());
+           errorFrame.setVisible(true);
        }  catch (SQLException e){
-           new InfoFrame().setVisible(true);
+           InfoFrame errorFrame = new InfoFrame();
+           errorFrame.setErrorLabel("SQL-ошибка");
+           errorFrame.setVisible(true);
        }     
     }
 }

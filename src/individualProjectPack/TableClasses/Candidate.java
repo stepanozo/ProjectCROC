@@ -101,4 +101,17 @@ public class Candidate {
             information.hashCode() +
             ((Integer)votes).hashCode();
     }
+    
+    @Override
+    public String toString(){
+        return String.format(
+                "Имя: '%s' " +
+                "Год рождения: %d " +
+                "Место проживания: '%s' " +
+                "Партия: '%s' " +
+                "Информация: '%s' " +
+                "Количество голосов: %d ",
+                name, yearOfBirth, placeOfLiving, party, information, votes
+        );
+    }
 }

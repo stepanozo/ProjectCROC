@@ -44,7 +44,7 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
         int i =0;
         for(Candidate candidate: candidates){
             labelArray[i].setText(
-                    candidate.getName() + " - " + Elections.percentageOfVotes(candidate) + " % голосов"
+                    candidate.getName() + " - " + Elections.percentageOfVotes(candidate, candidates) + " % голосов"
             );
             i++;
         }
