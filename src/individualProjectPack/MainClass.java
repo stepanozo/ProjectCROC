@@ -84,7 +84,7 @@ public class MainClass {
         //</editor-fold>
         
        try{
-            ConnectionUtil.setConnection(DriverManager.getConnection("jdbc:h2:/test", "sa", ""));
+            ConnectionUtil.setConnection(DriverManager.getConnection("jdbc:h2:~/test", "sa", ""));
             
             TableCreator.createUserTable();
             UserDAO.createUserIfNotExists(User.hashAndCreate("admin", "admin", true, true));
