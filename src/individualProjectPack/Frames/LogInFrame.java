@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package individualProjectPack;
+package individualProjectPack.Frames;
 
 import individualProjectPack.Frames.ElectionsResultFrame;
 import individualProjectPack.Frames.VoteFrame;
@@ -12,6 +12,9 @@ import individualProjectPack.Frames.RegistrationFrame;
 import individualProjectPack.Frames.InfoFrame;
 import java.sql.*;
 import individualProjectPack.DAO.*;
+import individualProjectPack.Elections;
+import individualProjectPack.MainClass;
+import individualProjectPack.SQLUtil;
 import java.time.LocalDateTime;
 /**
  *
@@ -24,6 +27,7 @@ public class LogInFrame extends javax.swing.JFrame {
      * Creates new form logInFrame
      */
     public LogInFrame() {
+        setLocationRelativeTo(null);
         initComponents();
         connectionErrorLabel.setVisible(false);
     }
@@ -47,6 +51,7 @@ public class LogInFrame extends javax.swing.JFrame {
         connectionErrorLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         loginButton.setText("Войти");
         loginButton.addActionListener(new java.awt.event.ActionListener() {

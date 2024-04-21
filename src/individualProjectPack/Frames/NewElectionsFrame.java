@@ -38,6 +38,7 @@ public class NewElectionsFrame extends javax.swing.JFrame {
      * Creates new form newElectionsForm
      */
     public NewElectionsFrame() {
+        setLocationRelativeTo(null);
         initComponents();
     }
 
@@ -61,6 +62,7 @@ public class NewElectionsFrame extends javax.swing.JFrame {
         formatLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);

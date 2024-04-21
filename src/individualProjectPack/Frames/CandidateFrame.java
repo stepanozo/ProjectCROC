@@ -24,6 +24,7 @@ public class CandidateFrame extends javax.swing.JFrame {
      * Creates new form CandidateFrame
      */
     public CandidateFrame(Candidate candidate) {
+        setLocationRelativeTo(null);
         initComponents();
         Elections.setCandidateFrame(this);
         // Параметры переноса слов
@@ -51,6 +52,7 @@ public class CandidateFrame extends javax.swing.JFrame {
         textArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);

@@ -7,7 +7,6 @@ package individualProjectPack.Frames;
 import individualProjectPack.DAO.*;
 import individualProjectPack.Elections;
 import individualProjectPack.Exceptions.NoSuchUserException;
-import individualProjectPack.LogInFrame;
 import individualProjectPack.MainClass;
 import individualProjectPack.SQLUtil;
 import individualProjectPack.TableClasses.*;
@@ -23,6 +22,7 @@ public class AdminFrame extends javax.swing.JFrame {
      * Creates new form AdminFrame
      */
     public AdminFrame() {
+        setLocationRelativeTo(null);
         initComponents();
     }
     public void enableAllButtons(){
@@ -52,6 +52,7 @@ public class AdminFrame extends javax.swing.JFrame {
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         voteButton.setText("Голосовать");
         voteButton.addActionListener(new java.awt.event.ActionListener() {

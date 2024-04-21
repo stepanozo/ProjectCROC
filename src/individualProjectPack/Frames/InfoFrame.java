@@ -14,6 +14,7 @@ public class InfoFrame extends javax.swing.JFrame {
      * Creates new form ConnectionErrorFrame
      */
     public InfoFrame() {
+        setLocationRelativeTo(null);
         initComponents();
     }
 
@@ -30,6 +31,7 @@ public class InfoFrame extends javax.swing.JFrame {
         OKButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         errorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         errorLabel.setText("Произошла ошибка подключения");

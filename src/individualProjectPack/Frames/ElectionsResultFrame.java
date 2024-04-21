@@ -6,7 +6,6 @@ package individualProjectPack.Frames;
 
 import individualProjectPack.DAO.UserDAO;
 import individualProjectPack.Elections;
-import individualProjectPack.LogInFrame;
 import individualProjectPack.MainClass;
 import individualProjectPack.TableClasses.Candidate;
 import java.sql.SQLException;
@@ -26,8 +25,9 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
      * Creates new form ElectionsResultFrame
      */
     public ElectionsResultFrame() {
+        setLocationRelativeTo(null);
         initComponents();
-                labelArray = new JLabel[]{
+        labelArray = new JLabel[]{
         jLabel0,
         jLabel1,
         jLabel2,
@@ -74,6 +74,7 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         backButton.setText("Назад");
         backButton.addActionListener(new java.awt.event.ActionListener() {

@@ -11,7 +11,6 @@ import individualProjectPack.DAO.UserDAO;
 import individualProjectPack.Elections;
 import individualProjectPack.TableClasses.User;
 import individualProjectPack.Exceptions.*;
-import individualProjectPack.LogInFrame;
 import individualProjectPack.MainClass;
 import java.sql.*;
 import javax.swing.JCheckBox;
@@ -36,6 +35,7 @@ public class VoteFrame extends javax.swing.JFrame {
      * Creates new form VoteFrame
      */
     public VoteFrame() {
+        setLocationRelativeTo(null);
         initComponents();
         checkBoxArray = new JCheckBox[]{
         jCheckBox0,
@@ -111,6 +111,7 @@ public class VoteFrame extends javax.swing.JFrame {
         jCheckBox7 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         filterButton.setText("Фильтр по критериям");
         filterButton.setToolTipText("");

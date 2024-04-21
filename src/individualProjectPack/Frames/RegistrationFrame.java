@@ -9,7 +9,6 @@ import individualProjectPack.Exceptions.InvalidInsertException;
 import individualProjectPack.DAO.UserDAO;
 import individualProjectPack.TableClasses.User;
 import individualProjectPack.Hashing.MD5Hashing;
-import individualProjectPack.LogInFrame;
 
 /**
  *
@@ -27,6 +26,7 @@ public class RegistrationFrame extends javax.swing.JFrame {
      * Creates new form registrationFrame
      */
     public RegistrationFrame() {
+        setLocationRelativeTo(null);
         initComponents();
     }
 
@@ -47,6 +47,7 @@ public class RegistrationFrame extends javax.swing.JFrame {
         cantRegisterLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);

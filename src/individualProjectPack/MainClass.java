@@ -4,6 +4,7 @@
  */
 package individualProjectPack;
 
+import individualProjectPack.Frames.LogInFrame;
 import individualProjectPack.Frames.InfoFrame;
 import individualProjectPack.Frames.CandidateFrame;
 import individualProjectPack.DAO.CandidateDAO;
@@ -86,7 +87,6 @@ public class MainClass {
                 //getConnection("jdbc:h2:mem:~/test", "sa", "");
            
             ConnectionUtil.setConnection(connection);
-       
             
             try{
                 TableCreator.createUserTable();

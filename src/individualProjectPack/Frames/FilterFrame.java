@@ -31,6 +31,7 @@ public class FilterFrame extends javax.swing.JFrame {
      * Creates new form FilterFrame
      */
     public FilterFrame() {
+        setLocationRelativeTo(null);
         initComponents();
         Elections.setFilterFrame(this);
     }
@@ -58,6 +59,7 @@ public class FilterFrame extends javax.swing.JFrame {
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
