@@ -17,6 +17,8 @@ import java.sql.*;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import java.util.HashMap;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  *
@@ -58,19 +60,7 @@ public class VoteFrame extends javax.swing.JFrame {
         Elections.setVoteFrame(this);
         numberOfCandidates = Elections.getNumberOfCandidates();
         choice = -1;
-        for(int i = MAX_CANDIDATES-1; i >= numberOfCandidates; i--){
-            checkBoxArray[i].setVisible(false);
-            candidateButtonsArray[i].setVisible(false);
-        }
-        HashSet<Candidate> candidates = Elections.getCandidates();
-        
-        numberAndCandidate = new HashMap();
-        int i =0;
-        for(Candidate candidate: candidates){
-            numberAndCandidate.put(i, candidate);
-            checkBoxArray[i].setText(candidate.getName());
-            i++;
-        }
+        showCandidates(Elections.getCandidates());
         
         
         try{
@@ -120,7 +110,7 @@ public class VoteFrame extends javax.swing.JFrame {
         jCheckBox6 = new javax.swing.JCheckBox();
         jCheckBox7 = new javax.swing.JCheckBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         filterButton.setText("Фильтр по критериям");
         filterButton.setToolTipText("");
@@ -154,6 +144,11 @@ public class VoteFrame extends javax.swing.JFrame {
 
         cancelFilter.setText("Сбросить фильтр");
         cancelFilter.setToolTipText("");
+        cancelFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelFilterActionPerformed(evt);
+            }
+        });
 
         jButton0.setText("Информация");
         jButton0.addActionListener(new java.awt.event.ActionListener() {
@@ -348,6 +343,28 @@ public class VoteFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    public void showCandidates(HashSet<Candidate> candidates){
+        choice = -1;
+        numberOfCandidates = candidates.size();
+        for(int i = MAX_CANDIDATES-1; i >= candidates.size(); i--){
+            checkBoxArray[i].setVisible(false);
+            candidateButtonsArray[i].setVisible(false);
+        }
+        
+        numberAndCandidate = new HashMap();
+        int i =0;
+        for(Candidate candidate: candidates){
+            numberAndCandidate.put(i, candidate);
+            checkBoxArray[i].setText(candidate.getName());
+            checkBoxArray[i].setVisible(true);
+            checkBoxArray[i].setSelected(false);
+            candidateButtonsArray[i].setVisible(true);
+            i++;
+        }
+    }
+    
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         
         try{
@@ -491,11 +508,16 @@ public class VoteFrame extends javax.swing.JFrame {
         FilterFrame filterFrame = new FilterFrame();
         filterFrame.setVisible(true);
         filterFrame.setVoteFrame(this);
+        enableAllButtons(false);
     }//GEN-LAST:event_filterButtonActionPerformed
+
+    private void cancelFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelFilterActionPerformed
+        showCandidates(Elections.getCandidates());
+    }//GEN-LAST:event_cancelFilterActionPerformed
 
     
     public void enableAllButtons(boolean value){
-        for(int i = 0; i < numberOfCandidates; i++){
+        for(int i = 0; i < MAX_CANDIDATES; i++){
             checkBoxArray[i].setEnabled(value);
             candidateButtonsArray[i].setEnabled(value);
         }

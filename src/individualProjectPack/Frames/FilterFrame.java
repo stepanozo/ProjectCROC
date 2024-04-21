@@ -5,6 +5,12 @@
 package individualProjectPack.Frames;
 
 import individualProjectPack.Elections;
+import java.util.stream.Collectors;
+import java.util.*;
+import java.util.function.Predicate;
+import individualProjectPack.TableClasses.*;
+import java.time.LocalDateTime;
+
 
 /**
  *
@@ -38,10 +44,51 @@ public class FilterFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jButton1 = new javax.swing.JButton();
+        ageComboBox = new javax.swing.JComboBox<>();
+        ageCheckbox = new javax.swing.JCheckBox();
+        ageTextField = new javax.swing.JTextField();
+        partyCheckbox = new javax.swing.JCheckBox();
+        partyTextField = new javax.swing.JTextField();
+        cityCheckbox = new javax.swing.JCheckBox();
+        cityTextField = new javax.swing.JTextField();
+        applyButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
+
+        jButton1.setText("jButton1");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
+            }
+        });
+
+        ageComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "старше", "моложе" }));
+
+        ageCheckbox.setText("По возрасту:");
+
+        ageTextField.setText("возраст");
+
+        partyCheckbox.setText("По партии");
+
+        partyTextField.setText("партия");
+
+        cityCheckbox.setText("По городу проживания");
+
+        cityTextField.setText("город");
+
+        applyButton.setText("Применить");
+        applyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                applyButtonActionPerformed(evt);
+            }
+        });
+
+        cancelButton.setText("Отмена");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
             }
         });
 
@@ -49,11 +96,49 @@ public class FilterFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(partyCheckbox)
+                            .addComponent(cityCheckbox)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(ageCheckbox)
+                                .addGap(36, 36, 36)
+                                .addComponent(ageComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(partyTextField)
+                            .addComponent(ageTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                            .addComponent(cityTextField)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(applyButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(62, 62, 62)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ageComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ageCheckbox)
+                    .addComponent(ageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(partyCheckbox)
+                    .addComponent(partyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cityCheckbox)
+                    .addComponent(cityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelButton)
+                    .addComponent(applyButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -62,6 +147,40 @@ public class FilterFrame extends javax.swing.JFrame {
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         voteFrame.enableAllButtons(true);
     }//GEN-LAST:event_formWindowClosed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
+
+        try{
+
+            Predicate<Candidate> pred= candidate -> true;
+
+            if(ageCheckbox.isSelected()){
+                if(ageComboBox.getSelectedIndex()==0)
+                    pred = pred.and(candidate -> LocalDateTime.now().getYear() - candidate.getYearOfBirth() > Integer.parseInt(ageTextField.getText()));
+                else if(ageComboBox.getSelectedIndex() == 1)
+                    pred = pred.and(candidate -> LocalDateTime.now().getYear() - candidate.getYearOfBirth() < Integer.parseInt(ageTextField.getText()));
+            }
+
+            if(partyCheckbox.isSelected())
+                pred = pred.and(candidate -> Objects.equals(candidate.getParty(), partyTextField.getText()));
+            if(cityCheckbox.isSelected())
+                pred = pred.and(candidate -> Objects.equals(candidate.getPlaceOfLiving(), partyTextField.getText()));
+
+
+            voteFrame.showCandidates(
+                    Elections.getCandidates().stream().filter(pred)
+                    .collect(Collectors.toCollection(HashSet::new)) //Здесь преобразуем в HashSet, который принимается методом showCandidates
+                    );
+            dispose();
+        } catch(NumberFormatException e){
+            InfoFrame infoFrame = new InfoFrame();
+            infoFrame.setErrorLabel("Неверно введен возраст кандидата.");
+        }
+    }//GEN-LAST:event_applyButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -99,5 +218,15 @@ public class FilterFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox ageCheckbox;
+    private javax.swing.JComboBox<String> ageComboBox;
+    private javax.swing.JTextField ageTextField;
+    private javax.swing.JButton applyButton;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JCheckBox cityCheckbox;
+    private javax.swing.JTextField cityTextField;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JCheckBox partyCheckbox;
+    private javax.swing.JTextField partyTextField;
     // End of variables declaration//GEN-END:variables
 }

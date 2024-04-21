@@ -62,7 +62,7 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        OKButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
         electionsEndedLabel = new javax.swing.JLabel();
         jLabel0 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -73,12 +73,12 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        OKButton.setText("ОК");
-        OKButton.addActionListener(new java.awt.event.ActionListener() {
+        backButton.setText("Назад");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                OKButtonActionPerformed(evt);
+                backButtonActionPerformed(evt);
             }
         });
 
@@ -120,7 +120,7 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
                             .addComponent(jLabel7)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(111, 111, 111)
-                        .addComponent(OKButton, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(119, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -145,14 +145,14 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
-                .addComponent(OKButton)
+                .addComponent(backButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void OKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OKButtonActionPerformed
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         try{
             if(UserDAO.checkIfAdmin(MainClass.getMyLogin())){
                 new AdminFrame().setVisible(true);
@@ -167,7 +167,7 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
         } finally {
             dispose();
         }
-    }//GEN-LAST:event_OKButtonActionPerformed
+    }//GEN-LAST:event_backButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -205,7 +205,7 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton OKButton;
+    private javax.swing.JButton backButton;
     private javax.swing.JLabel electionsEndedLabel;
     private javax.swing.JLabel jLabel0;
     private javax.swing.JLabel jLabel1;

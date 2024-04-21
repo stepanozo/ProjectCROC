@@ -134,42 +134,51 @@ public class LogInFrame extends javax.swing.JFrame {
     
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
        try{
-            if(UserDAO.successfulLogIn(loginField.getText(), String.valueOf(passwordField.getPassword()))){
-                
-                MainClass.setMyLogin(loginField.getText());
-                //TODO Сдесь сделать проверку, это обычный пользователь или админ
-                if(UserDAO.checkIfAdmin(loginField.getText())){
-                    AdminFrame adminFrame = new AdminFrame();
-                    adminFrame.setVisible(true);
-                    dispose();
-                }else{ 
-                    if(SQLUtil.checkIfElectionsExist() &&
-                            LocalDateTime.now().isAfter(Elections.getDateTimeOfBegining()) )
-                    {
-                        if(LocalDateTime.now().isBefore(Elections.getDateTimeOfEnding())){
-                            VoteFrame voteFrame = new VoteFrame();
-                            voteFrame.setVisible(true);
-                        } else{
-                            ElectionsResultFrame resultFrame = new ElectionsResultFrame();
-                            resultFrame.setVisible(true);
+           String password = String.valueOf(passwordField.getPassword());
+           String login = loginField.getText();
+           if(isLoginCorrect(login)){
+               if(isPasswordCorrect(password)){
+                    if(UserDAO.successfulLogIn(login, password)){
+
+                        MainClass.setMyLogin(login);
+                        //TODO Сдесь сделать проверку, это обычный пользователь или админ
+                        if(UserDAO.checkIfAdmin(login)){
+                            AdminFrame adminFrame = new AdminFrame();
+                            adminFrame.setVisible(true);
+                            dispose();
+                        }else{ 
+                            if(SQLUtil.checkIfElectionsExist() &&
+                                    LocalDateTime.now().isAfter(Elections.getDateTimeOfBegining()) )
+                            {
+                                if(LocalDateTime.now().isBefore(Elections.getDateTimeOfEnding())){
+                                    VoteFrame voteFrame = new VoteFrame();
+                                    voteFrame.setVisible(true);
+                                } else{
+                                    ElectionsResultFrame resultFrame = new ElectionsResultFrame();
+                                    resultFrame.setVisible(true);
+                                }
+                                dispose();
+                            }
+                            else{
+                                InfoFrame infoFrame = new InfoFrame();
+                                infoFrame.setErrorLabel("Выборы в данный момент не проводятся");
+                                infoFrame.setVisible(true);
+                            }
                         }
-                        dispose();
                     }
-                    else{
-                        InfoFrame infoFrame = new InfoFrame();
-                        infoFrame.setErrorLabel("Выборы в данный момент не проводятся");
-                        infoFrame.setVisible(true);
-                    }
-                }
-            }
-             wrongPasswordLabel.setText("Неверный логин или пароль");
+                     wrongPasswordLabel.setText("Неверный логин или пароль");
+               } else  wrongPasswordLabel.setText("Некорректный пароль");
+           } else  wrongPasswordLabel.setText("Некорректный логин");
        } catch(SQLException e){
            wrongPasswordLabel.setText("Ошибка входа.");
        }
     }//GEN-LAST:event_loginButtonActionPerformed
 
-    private void ifLoginCorrect(String login){
-        //TODO написать проверку пароля и логина на корректность
+    private boolean isLoginCorrect(String login){
+        return !login.contains("[^a-zA-Z0-9_]");
+    }
+    private boolean isPasswordCorrect(String password){
+        return !password.contains("[^a-zA-Z0-9_]") && password.length() >= 5;
     }
     
     public void enableRegistrationButton(){

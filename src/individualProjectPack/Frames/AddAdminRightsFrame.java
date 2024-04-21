@@ -49,6 +49,9 @@ public class AddAdminRightsFrame extends javax.swing.JFrame {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
             }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
         });
 
         loginField.setText("Логин");
@@ -133,8 +136,13 @@ public class AddAdminRightsFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+
         adminFrame.enableAllButtons();
     }//GEN-LAST:event_formWindowClosed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        adminFrame.enableAllButtons();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

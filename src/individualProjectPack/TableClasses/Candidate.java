@@ -105,12 +105,12 @@ public class Candidate {
     @Override
     public String toString(){
         return String.format(
-                "Имя: '%s' " +
-                "Год рождения: %d " +
-                "Место проживания: '%s' " +
-                "Партия: '%s' " +
-                "Информация: '%s' " +
-                "Количество голосов: %d ",
+                "Имя: '%s' \n" +
+                "Год рождения: %d \n" +
+                "Место проживания: '%s' \n" +
+                "Партия: '%s' \n" +
+                "Информация: '%s' \n" +
+                "Количество голосов: %d \n",
                 name, yearOfBirth, placeOfLiving, party, information, votes
         );
     }

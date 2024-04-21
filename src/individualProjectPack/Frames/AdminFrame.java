@@ -51,7 +51,7 @@ public class AdminFrame extends javax.swing.JFrame {
 
         jButton1.setText("jButton1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         voteButton.setText("Голосовать");
         voteButton.addActionListener(new java.awt.event.ActionListener() {
