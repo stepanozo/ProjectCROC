@@ -106,8 +106,6 @@ public class MainClass {
                 }
             }
             new LogInFrame().setVisible(true);
-            
-            
        } catch (
                InvalidTableCreationException |
                NoElectionsException |
