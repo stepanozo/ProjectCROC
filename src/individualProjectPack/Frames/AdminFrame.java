@@ -4,6 +4,7 @@
  */
 package individualProjectPack.Frames;
 
+import individualProjectPack.ConnectionUtil;
 import individualProjectPack.DAO.*;
 import individualProjectPack.Elections;
 import individualProjectPack.MainClass;
@@ -51,6 +52,11 @@ public class AdminFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         voteButton.setText("Голосовать");
         voteButton.addActionListener(new java.awt.event.ActionListener() {
@@ -223,6 +229,10 @@ public class AdminFrame extends javax.swing.JFrame {
                 MainClass.showInfoFrame("SQL-ошибка");
         }
     }//GEN-LAST:event_voteButtonActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+
+    }//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addAdminRightsButton;

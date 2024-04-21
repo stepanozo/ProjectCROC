@@ -84,10 +84,7 @@ public class MainClass {
         //</editor-fold>
         
        try{
-            Connection connection = DriverManager.
-                   getConnection("jdbc:h2:~/test", "sa", "");
-           
-            ConnectionUtil.setConnection(connection);
+            ConnectionUtil.setConnection(DriverManager.getConnection("jdbc:h2:/test", "sa", ""));
             
             TableCreator.createUserTable();
             UserDAO.createUserIfNotExists(User.hashAndCreate("admin", "admin", true, true));
@@ -104,16 +101,17 @@ public class MainClass {
                     waiterThread = new Thread(Waiter.getInstance());
                     waiterThread.start();
                 }
+                
             }
             new LogInFrame().setVisible(true);
-       } catch (
+        } catch (
                InvalidTableCreationException |
                NoElectionsException |
                NoCandidatesException |
                InvalidInsertException e){
-           showInfoFrame(e.getMessage());
-       }  catch (SQLException e){
+            showInfoFrame(e.getMessage());
+        } catch (SQLException e){
            showInfoFrame("SQL-ошибка.");
-       }     
+        }     
     }
 }
