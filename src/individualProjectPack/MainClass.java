@@ -88,7 +88,9 @@ public class MainClass {
             String user = "stepanozo";
             String password = "stepanozo";
             
-            ConnectionUtil.setConnection(DriverManager.getConnection(url, user, password));
+            ConnectionUtil.setUrl(url);
+            ConnectionUtil.setUser(user);
+            ConnectionUtil.setPassword(password);
             
             TableCreator.createUserTable();
             UserDAO.createUserIfNotExists(User.hashAndCreate("admin", "admin", true, true));

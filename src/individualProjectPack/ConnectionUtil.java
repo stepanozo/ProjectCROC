@@ -11,14 +11,28 @@ import java.sql.*;
  */
 public class ConnectionUtil {
     
-    private static Connection connection;
+    private static String url;
+    private static String user;
+    private static String password;
     
-    public static Connection getConnection(){
-        return connection;
+    public static String getUrl(){
+        return url;
+    }
+    public static String getUser(){
+        return user;
+    }
+    public static String getPassword(){
+        return password;
     }
     
-    public static void setConnection(Connection setConnection){
-        connection = setConnection;
+    public static void setUrl(String newUrl){
+        url = newUrl;
     }
-   
+    public static void setUser(String newUser){
+        user = newUser;
+    }
+    public static void setPassword(String newPassword){
+        password = newPassword;
+    }
+    
 }

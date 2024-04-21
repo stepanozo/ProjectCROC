@@ -17,8 +17,12 @@ public class TableDestroyer {
     }
       
     public static void dropUserTable() throws InvalidTableDestroyException {
-        try {
-            Statement statement = ConnectionUtil.getConnection().createStatement();
+        try (Connection connection = DriverManager.
+                getConnection(
+                        ConnectionUtil.getUrl(),
+                        ConnectionUtil.getUser(),
+                        ConnectionUtil.getPassword())) {
+            Statement statement = connection.createStatement();
             statement.execute(
                     "DROP TABLE Users");
         } catch(SQLException e){
@@ -27,8 +31,12 @@ public class TableDestroyer {
     }
     
     public static void dropCandidateTable() throws InvalidTableDestroyException {
-         try {
-            Statement statement = ConnectionUtil.getConnection().createStatement();
+        try (Connection connection = DriverManager.
+                getConnection(
+                        ConnectionUtil.getUrl(),
+                        ConnectionUtil.getUser(),
+                        ConnectionUtil.getPassword())) {
+            Statement statement = connection.createStatement();
             statement.execute(
                     "DROP TABLE Candidates");
         } catch(SQLException e){
@@ -37,8 +45,12 @@ public class TableDestroyer {
     }
     
     public static void dropElectionTimeTable() throws InvalidTableDestroyException {
-         try {
-            Statement statement = ConnectionUtil.getConnection().createStatement();
+        try (Connection connection = DriverManager.
+                getConnection(
+                        ConnectionUtil.getUrl(),
+                        ConnectionUtil.getUser(),
+                        ConnectionUtil.getPassword())) {
+            Statement statement = connection.createStatement();
             statement.execute(
                     "DROP TABLE ElectionsTime");
         } catch(SQLException e){

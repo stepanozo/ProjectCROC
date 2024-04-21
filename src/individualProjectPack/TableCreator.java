@@ -17,8 +17,13 @@ public class TableCreator {
     }
       
     public static void createUserTable() throws InvalidTableCreationException {
-        try {
-            Statement statement = ConnectionUtil.getConnection().createStatement();
+        
+        try (Connection connection = DriverManager.
+                getConnection(
+                        ConnectionUtil.getUrl(),
+                        ConnectionUtil.getUser(),
+                        ConnectionUtil.getPassword())) {
+            Statement statement = connection.createStatement();
             statement.execute(
                     "CREATE TABLE IF NOT EXISTS Users(login VARCHAR(255) NOT NULL, passwordHash VARCHAR(255) NOT NULL, voted BOOLEAN NOT NULL, isAdmin BOOLEAN NOT NULL) "
             );
@@ -28,8 +33,12 @@ public class TableCreator {
     }
     
     public static void createCandidateTable() throws InvalidTableCreationException {
-        try {
-            Statement statement = ConnectionUtil.getConnection().createStatement();
+         try (Connection connection = DriverManager.
+                getConnection(
+                        ConnectionUtil.getUrl(),
+                        ConnectionUtil.getUser(),
+                        ConnectionUtil.getPassword())) {
+            Statement statement = connection.createStatement();
             statement.execute(
                     "CREATE TABLE IF NOT EXISTS Candidates(name VARCHAR(255) NOT NULL, yearOfBirth INT, placeOfLiving VARCHAR(255), party VARCHAR(255), information VARCHAR(1000), votes INT);" 
             );
@@ -39,8 +48,12 @@ public class TableCreator {
     }
     
     public static void createElectionTimeTable() throws InvalidTableCreationException {
-        try {
-            Statement statement = ConnectionUtil.getConnection().createStatement();
+        try (Connection connection = DriverManager.
+                getConnection(
+                        ConnectionUtil.getUrl(),
+                        ConnectionUtil.getUser(),
+                        ConnectionUtil.getPassword())) {
+            Statement statement = connection.createStatement();
             statement.execute(
                     "CREATE TABLE IF NOT EXISTS ElectionsTime(dateTimeOfBegining datetime NOT NULL, dateTimeOfEnding datetime NOT NULL)");
                          

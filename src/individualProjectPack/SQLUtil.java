@@ -18,7 +18,12 @@ public class SQLUtil {
     
     public static void newTimeOfElections(LocalDateTime beginTime, LocalDateTime endTime) throws InvalidInsertException{
         
-        try (Statement statement = ConnectionUtil.getConnection().createStatement()){
+        try (Connection connection = DriverManager.
+                getConnection(
+                        ConnectionUtil.getUrl(),
+                        ConnectionUtil.getUser(),
+                        ConnectionUtil.getPassword())) {
+                Statement statement = connection.createStatement();
                 statement.execute(
                      "TRUNCATE TABLE ElectionsTime "      
                     );
@@ -33,7 +38,12 @@ public class SQLUtil {
     
     public static void newCandidateTable() throws InvalidTableDestroyException{
         
-        try (Statement statement = ConnectionUtil.getConnection().createStatement()){
+        try (Connection connection = DriverManager.
+                getConnection(
+                        ConnectionUtil.getUrl(),
+                        ConnectionUtil.getUser(),
+                        ConnectionUtil.getPassword())) {
+                Statement statement = connection.createStatement();
                 statement.execute(
                      "TRUNCATE TABLE Candidates "      
                     );
@@ -43,7 +53,12 @@ public class SQLUtil {
     }
     
     public static boolean checkIfElectionsExist() throws SQLException{
-        try (Statement statement = ConnectionUtil.getConnection().createStatement()){
+        try (Connection connection = DriverManager.
+                getConnection(
+                        ConnectionUtil.getUrl(),
+                        ConnectionUtil.getUser(),
+                        ConnectionUtil.getPassword())) {
+            Statement statement = connection.createStatement();
             statement.execute(
                      "SELECT * FROM ElectionsTime"
             );
@@ -57,7 +72,12 @@ public class SQLUtil {
         if(!checkIfElectionsExist())
             throw new NoElectionsException("Попытка получить начало несуществующих выборов");
         
-        try (Statement statement = ConnectionUtil.getConnection().createStatement()){
+        try (Connection connection = DriverManager.
+                getConnection(
+                        ConnectionUtil.getUrl(),
+                        ConnectionUtil.getUser(),
+                        ConnectionUtil.getPassword())) {
+            Statement statement = connection.createStatement();
             statement.execute(
                      "SELECT dateTimeOfBegining FROM ElectionsTime"
             );
@@ -76,7 +96,12 @@ public class SQLUtil {
         if(!checkIfElectionsExist())
             throw new NoElectionsException("Попытка получить конец несуществующих выборов");
         
-        try (Statement statement = ConnectionUtil.getConnection().createStatement()){
+        try (Connection connection = DriverManager.
+                getConnection(
+                        ConnectionUtil.getUrl(),
+                        ConnectionUtil.getUser(),
+                        ConnectionUtil.getPassword())) {
+            Statement statement = connection.createStatement();
             statement.execute(
                      "SELECT dateTimeOfEnding FROM ElectionsTime"
             );
