@@ -4,11 +4,13 @@
  */
 package individualProjectPack;
 
+import individualProjectPack.Frames.InfoFrame;
+import individualProjectPack.Frames.CandidateFrame;
 import individualProjectPack.DAO.CandidateDAO;
 import java.sql.*;
 import individualProjectPack.Exceptions.*;
 import individualProjectPack.DAO.UserDAO;
-import individualProjectPack.TableClasses.User;
+import individualProjectPack.TableClasses.*;
 import individualProjectPack.Waiter;
 import java.time.LocalDateTime;
 import java.io.File;
@@ -77,7 +79,6 @@ public class MainClass {
         }
         //</editor-fold>
         //</editor-fold>
- 
         
        try{
             Connection connection = DriverManager.

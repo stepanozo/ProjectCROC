@@ -2,10 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package individualProjectPack;
+package individualProjectPack.Frames;
 
 import individualProjectPack.DAO.*;
+import individualProjectPack.Elections;
 import individualProjectPack.Exceptions.NoSuchUserException;
+import individualProjectPack.LogInFrame;
+import individualProjectPack.MainClass;
+import individualProjectPack.SQLUtil;
 import individualProjectPack.TableClasses.*;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -47,7 +51,7 @@ public class AdminFrame extends javax.swing.JFrame {
 
         jButton1.setText("jButton1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         voteButton.setText("Голосовать");
         voteButton.addActionListener(new java.awt.event.ActionListener() {

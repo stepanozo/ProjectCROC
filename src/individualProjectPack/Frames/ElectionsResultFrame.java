@@ -2,9 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package individualProjectPack;
+package individualProjectPack.Frames;
 
 import individualProjectPack.DAO.UserDAO;
+import individualProjectPack.Elections;
+import individualProjectPack.LogInFrame;
+import individualProjectPack.MainClass;
 import individualProjectPack.TableClasses.Candidate;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -70,7 +73,7 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         OKButton.setText("ОК");
         OKButton.addActionListener(new java.awt.event.ActionListener() {

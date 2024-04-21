@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package individualProjectPack;
+package individualProjectPack.Frames;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,6 +10,11 @@ import individualProjectPack.Exceptions.*;
 import individualProjectPack.TableClasses.*;
 import individualProjectPack.DAO.CandidateDAO;
 import individualProjectPack.DAO.UserDAO;
+import individualProjectPack.Elections;
+import individualProjectPack.FilesUtil;
+import individualProjectPack.MainClass;
+import individualProjectPack.SQLUtil;
+import individualProjectPack.Waiter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -265,7 +270,7 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                 if(user.getVoted())
                     writer.append(user.toString() + "\n");
              
-            writer.append("\\nnУчаствовавшие кандидаты: \n\n");
+            writer.append("\n\nУчаствовавшие кандидаты: \n\n");
             for(Candidate candidate : candidates) {
                 writer.append(candidate.toString() + "\n\n");
             }

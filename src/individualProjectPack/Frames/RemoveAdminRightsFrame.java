@@ -1,7 +1,8 @@
-package individualProjectPack;
+package individualProjectPack.Frames;
 
 import individualProjectPack.DAO.UserDAO;
 import individualProjectPack.Exceptions.*;
+import individualProjectPack.MainClass;
 import java.sql.*;
 
 /*
@@ -13,7 +14,7 @@ import java.sql.*;
  *
  * @author чтепоноза
  */
-public class AddAdminRightsFrame extends javax.swing.JFrame {
+public class RemoveAdminRightsFrame extends javax.swing.JFrame {
 
     
     private AdminFrame adminFrame;
@@ -25,7 +26,7 @@ public class AddAdminRightsFrame extends javax.swing.JFrame {
     /**
      * Creates new form addAdminRightsFrame
      */
-    public AddAdminRightsFrame() {
+    public RemoveAdminRightsFrame() {
         initComponents();
     }
 
@@ -40,10 +41,10 @@ public class AddAdminRightsFrame extends javax.swing.JFrame {
 
         loginField = new javax.swing.JTextField();
         addRightsLabel = new javax.swing.JLabel();
-        addButton = new javax.swing.JButton();
+        removeButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -54,10 +55,10 @@ public class AddAdminRightsFrame extends javax.swing.JFrame {
 
         addRightsLabel.setText("Введите логин");
 
-        addButton.setText("Добавить");
-        addButton.addActionListener(new java.awt.event.ActionListener() {
+        removeButton.setText("Убрать права");
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addButtonActionPerformed(evt);
+                removeButtonActionPerformed(evt);
             }
         });
 
@@ -74,15 +75,14 @@ public class AddAdminRightsFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(addRightsLabel)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(addButton)
-                            .addGap(18, 18, 18)
-                            .addComponent(cancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(loginField, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(removeButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(cancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(loginField, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,7 +93,7 @@ public class AddAdminRightsFrame extends javax.swing.JFrame {
                 .addComponent(loginField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addButton)
+                    .addComponent(removeButton)
                     .addComponent(cancelButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -101,15 +101,10 @@ public class AddAdminRightsFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void blockAdminButtons(){
-        addButton.setEnabled(false);;
-    }
-    
-    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        try{
-            //Проверим, что пользователь всё ещё админ
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        try{//Проверим, что пользователь всё ещё админ
             if(UserDAO.checkIfAdmin(MainClass.getMyLogin())){
-                UserDAO.setAdminRights(loginField.getText(), true);
+                UserDAO.setAdminRights(loginField.getText(), false);
                 dispose();
             }else {
                 blockAdminButtons();
@@ -125,8 +120,12 @@ public class AddAdminRightsFrame extends javax.swing.JFrame {
            errorFrame.setErrorLabel("Ошибка SQL.");
            errorFrame.setVisible(true);
         }
-    }//GEN-LAST:event_addButtonActionPerformed
+    }//GEN-LAST:event_removeButtonActionPerformed
 
+    public void blockAdminButtons(){
+        removeButton.setEnabled(false);
+    }
+    
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
@@ -152,29 +151,35 @@ public class AddAdminRightsFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddAdminRightsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RemoveAdminRightsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddAdminRightsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RemoveAdminRightsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddAdminRightsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RemoveAdminRightsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddAdminRightsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RemoveAdminRightsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddAdminRightsFrame().setVisible(true);
+                new RemoveAdminRightsFrame().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addButton;
     private javax.swing.JLabel addRightsLabel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField loginField;
+    private javax.swing.JButton removeButton;
     // End of variables declaration//GEN-END:variables
 }

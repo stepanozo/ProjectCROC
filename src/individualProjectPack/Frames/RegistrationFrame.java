@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package individualProjectPack;
+package individualProjectPack.Frames;
 
 import individualProjectPack.Exceptions.InvalidInsertException;
 import individualProjectPack.DAO.UserDAO;
 import individualProjectPack.TableClasses.User;
 import individualProjectPack.Hashing.MD5Hashing;
+import individualProjectPack.LogInFrame;
 
 /**
  *

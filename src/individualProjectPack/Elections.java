@@ -8,6 +8,9 @@ package individualProjectPack;
  *
  * @author чтепоноза
  */
+import individualProjectPack.Frames.VoteFrame;
+import individualProjectPack.Frames.CandidateFrame;
+import individualProjectPack.Frames.FilterFrame;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import individualProjectPack.TableClasses.Candidate;
@@ -20,12 +23,27 @@ public class Elections {
     
     private static HashSet<Candidate> candidates = new HashSet();
     private static VoteFrame voteFrame; //Храним эту форму здесь, чтобы после окончания выборов её закрыть и заменить на форму результатов выборов.
+    private static CandidateFrame candidateFrame;
+    private static FilterFrame filterFrame;
+    
+    public static FilterFrame getFilterFrame(){
+        return filterFrame;
+    }
+    public static void setFilterFrame(FilterFrame newFilterFrame){
+        filterFrame = newFilterFrame;
+    }
     
     public static VoteFrame getVoteFrame(){
         return voteFrame;
     }
     public static void setVoteFrame(VoteFrame newVoteFrame){
         voteFrame = newVoteFrame;
+    }
+     public static CandidateFrame getCandidateFrame(){
+        return candidateFrame;
+    }
+    public static void setCandidateFrame(CandidateFrame newCandidateFrame){
+        candidateFrame = newCandidateFrame;
     }
     
     public static int getNumberOfCandidates(){

@@ -4,6 +4,8 @@
  */
 package individualProjectPack;
 
+import individualProjectPack.Frames.ElectionsResultFrame;
+import individualProjectPack.Frames.InfoFrame;
 import individualProjectPack.DAO.CandidateDAO;
 import java.time.LocalDateTime;
 import individualProjectPack.Elections;
@@ -48,7 +50,12 @@ public class Waiter implements Runnable {
             if(Elections.getVoteFrame() != null){
                 new ElectionsResultFrame().setVisible(true);
                 Elections.getVoteFrame().dispose();
+                if(Elections.getCandidateFrame() != null)
+                    Elections.getCandidateFrame().dispose();
+                if(Elections.getFilterFrame() != null)
+                    Elections.getFilterFrame().dispose();
             }
+
         } catch(NoCandidatesException e){
             InfoFrame infoFrame = new InfoFrame();
             infoFrame.setErrorLabel(e.getMessage());

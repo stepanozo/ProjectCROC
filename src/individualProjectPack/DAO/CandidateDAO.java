@@ -114,13 +114,13 @@ public class CandidateDAO {
         }
     }
     
-    public static void voteForCandidate(String name) throws SQLException, NoSuchCandidateException {
+    public static void voteForCandidate(Candidate candidate) throws SQLException, NoSuchCandidateException {
 
          try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
             boolean hasResult = statement.execute(String.format(
                      "SELECT * FROM Candidates " +
                             "WHERE name = '%s'",
-                    name
+                    candidate.getName()
             ));
             if (hasResult) {
                 ResultSet resultSet = statement.getResultSet();
@@ -129,10 +129,10 @@ public class CandidateDAO {
                             "UPDATE Candidates " +
                                     "SET votes = votes + 1 " +
                                     "WHERE name = '%s'",
-                                    name
+                                    candidate.getName()
                     ));
                 } else
-                    throw new NoSuchCandidateException("Такого кандидата нет: " + name, name);
+                    throw new NoSuchCandidateException("Такого кандидата нет: " + candidate.getName(), candidate.getName());
             } else
                 throw new SQLException();
         }

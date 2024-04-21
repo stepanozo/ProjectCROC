@@ -5,6 +5,11 @@
  */
 package individualProjectPack;
 
+import individualProjectPack.Frames.ElectionsResultFrame;
+import individualProjectPack.Frames.VoteFrame;
+import individualProjectPack.Frames.AdminFrame;
+import individualProjectPack.Frames.RegistrationFrame;
+import individualProjectPack.Frames.InfoFrame;
 import java.sql.*;
 import individualProjectPack.DAO.*;
 import java.time.LocalDateTime;
