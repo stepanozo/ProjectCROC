@@ -85,7 +85,7 @@ public class MainClass {
         
        try{
             Connection connection = DriverManager.
-                   getConnection("jdbc:h2:/~test", "sa", "");
+                   getConnection("jdbc:h2:~/test", "sa", "");
            
             ConnectionUtil.setConnection(connection);
             
@@ -111,6 +111,7 @@ public class MainClass {
                NoElectionsException |
                NoCandidatesException |
                InvalidInsertException e){
+           showInfoFrame(e.getMessage());
        }  catch (SQLException e){
            showInfoFrame("SQL-ошибка.");
        }     
