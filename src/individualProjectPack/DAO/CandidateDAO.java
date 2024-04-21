@@ -9,11 +9,8 @@ import individualProjectPack.TableClasses.Candidate;
 import individualProjectPack.ConnectionUtil;
 import individualProjectPack.Exceptions.*;
 import java.sql.*;
-import individualProjectPack.Hashing.MD5Hashing;
-import individualProjectPack.TableClasses.User;
 import java.util.HashSet;
-import java.util.stream.Stream;
-import java.util.List;
+
 /**
  *
  * @author чтепоноза

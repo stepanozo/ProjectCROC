@@ -5,11 +5,6 @@
  */
 package individualProjectPack.Frames;
 
-import individualProjectPack.Frames.ElectionsResultFrame;
-import individualProjectPack.Frames.VoteFrame;
-import individualProjectPack.Frames.AdminFrame;
-import individualProjectPack.Frames.RegistrationFrame;
-import individualProjectPack.Frames.InfoFrame;
 import java.sql.*;
 import individualProjectPack.DAO.*;
 import individualProjectPack.Elections;
@@ -146,7 +141,7 @@ public class LogInFrame extends javax.swing.JFrame {
                     if(UserDAO.successfulLogIn(login, password)){
 
                         MainClass.setMyLogin(login);
-                        //TODO Сдесь сделать проверку, это обычный пользователь или админ
+                        //Проверим, обычный это пользователь или админ
                         if(UserDAO.checkIfAdmin(login)){
                             AdminFrame adminFrame = new AdminFrame();
                             adminFrame.setVisible(true);
@@ -165,13 +160,11 @@ public class LogInFrame extends javax.swing.JFrame {
                                 dispose();
                             }
                             else{
-                                InfoFrame infoFrame = new InfoFrame();
-                                infoFrame.setErrorLabel("Выборы в данный момент не проводятся");
-                                infoFrame.setVisible(true);
+                                MainClass.showInfoFrame("Выборы в данный момент не проводятся.");
                             }
                         }
                     }
-                     wrongPasswordLabel.setText("Неверный логин или пароль");
+                    wrongPasswordLabel.setText("Неверный логин или пароль");
                } else  wrongPasswordLabel.setText("Некорректный пароль");
            } else  wrongPasswordLabel.setText("Некорректный логин");
        } catch(SQLException e){
@@ -180,10 +173,10 @@ public class LogInFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private boolean isLoginCorrect(String login){
-        return !login.contains("[^a-zA-Z0-9_]");
+        return login.matches("[a-zA-Z0-9_]+") && login.length() >=5;
     }
     private boolean isPasswordCorrect(String password){
-        return !password.contains("[^a-zA-Z0-9_]") && password.length() >= 5;
+        return password.matches("[a-zA-Z0-9_]+") && password.length() >=5;
     }
     
     public void enableRegistrationButton(){

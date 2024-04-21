@@ -7,8 +7,12 @@ package individualProjectPack.Frames;
 
 import individualProjectPack.Exceptions.InvalidInsertException;
 import individualProjectPack.DAO.UserDAO;
+import individualProjectPack.Elections;
+import individualProjectPack.MainClass;
+import individualProjectPack.SQLUtil;
 import individualProjectPack.TableClasses.User;
-import individualProjectPack.Hashing.MD5Hashing;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -120,54 +124,26 @@ public class RegistrationFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
-        if(isPasswordCorrect(String.valueOf(passwordField.getPassword())))
-            try{
-                UserDAO.createUser(User.hashAndCreate(loginField.getText(), String.valueOf(passwordField.getPassword()), false, false));
-                cantRegisterLabel.setText("Регистрация прошла успешно.");
-            } catch(InvalidInsertException e){
+        try{
+            String password = String.valueOf(passwordField.getPassword());
+            String login = loginField.getText();
+            if(isLoginCorrect(login)){
+               if(isPasswordCorrect(password)){
+                    UserDAO.createUser(User.hashAndCreate(loginField.getText(), String.valueOf(passwordField.getPassword()), false, false));
+                    cantRegisterLabel.setText("Регистрация прошла успешно.");
+               } else  cantRegisterLabel.setText("Некорректный пароль");
+            } else  cantRegisterLabel.setText("Некорректный логин");
+        } catch(InvalidInsertException e){
                 cantRegisterLabel.setText("Ошибка регистрации. Возможно, такой пользователь уже существует.");
-            }
+        }
     }//GEN-LAST:event_confirmButtonActionPerformed
 
     
-    private boolean isPasswordCorrect(String password){
-        //TODO Здесь можно написать проверку пароля на корректность, чтоб он содержал только допустимые символы и был допустимой длины
-        return true;
+    private boolean isLoginCorrect(String login){
+        return login.matches("[a-zA-Z0-9_]+") && login.length() >=5;
     }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegistrationFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegistrationFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegistrationFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegistrationFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegistrationFrame().setVisible(true);
-            }
-        });
+    private boolean isPasswordCorrect(String password){
+        return password.matches("[a-zA-Z0-9_]+") && password.length() >=5;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

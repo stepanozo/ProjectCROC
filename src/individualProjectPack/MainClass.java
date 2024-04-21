@@ -6,16 +6,12 @@ package individualProjectPack;
 
 import individualProjectPack.Frames.LogInFrame;
 import individualProjectPack.Frames.InfoFrame;
-import individualProjectPack.Frames.CandidateFrame;
 import individualProjectPack.DAO.CandidateDAO;
 import java.sql.*;
 import individualProjectPack.Exceptions.*;
 import individualProjectPack.DAO.UserDAO;
 import individualProjectPack.TableClasses.*;
-import individualProjectPack.Waiter;
 import java.time.LocalDateTime;
-import java.io.File;
-import java.io.IOException;
 
 /**
  *
@@ -51,6 +47,12 @@ public class MainClass {
             errorFrame.setErrorLabel(e.getMessage());
             errorFrame.setVisible(true);
         }
+    }
+    
+    public static void showInfoFrame(String string){
+            InfoFrame errorFrame = new InfoFrame();
+            errorFrame.setErrorLabel(string);
+            errorFrame.setVisible(true);
     }
    
      /**
@@ -112,9 +114,7 @@ public class MainClass {
                NoCandidatesException |
                InvalidInsertException e){
        }  catch (SQLException e){
-           InfoFrame errorFrame = new InfoFrame();
-           errorFrame.setErrorLabel("SQL-ошибка");
-           errorFrame.setVisible(true);
+           showInfoFrame("SQL-ошибка.");
        }     
     }
 }

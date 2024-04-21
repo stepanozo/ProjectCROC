@@ -8,7 +8,6 @@ import individualProjectPack.Frames.ElectionsResultFrame;
 import individualProjectPack.Frames.InfoFrame;
 import individualProjectPack.DAO.CandidateDAO;
 import java.time.LocalDateTime;
-import individualProjectPack.Elections;
 import individualProjectPack.Exceptions.NoCandidatesException;
 import java.sql.SQLException;
 

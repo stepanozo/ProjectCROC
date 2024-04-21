@@ -9,7 +9,6 @@ import individualProjectPack.TableClasses.User;
 import individualProjectPack.ConnectionUtil;
 import java.sql.*;
 import individualProjectPack.Hashing.MD5Hashing;
-import individualProjectPack.TableClasses.Candidate;
 import java.util.HashSet;
 /**
  *
