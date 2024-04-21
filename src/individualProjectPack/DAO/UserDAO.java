@@ -26,8 +26,7 @@ public class UserDAO {
         
         try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
             boolean hasResult = statement.execute(String.format(
-                     "SELECT * FROM Users " +
-                             "WHERE login = '%s'",
+                     "SELECT * FROM Users WHERE login = '%s'",
                             user.getLogin()
                     ));
             if (hasResult) {
@@ -41,7 +40,32 @@ public class UserDAO {
                        user.getVoted(),
                        user.getIsAdmin()
                ));
-            }
+            } else throw new SQLException();
+        }catch (SQLException E){
+            throw new InvalidInsertException("Не удалось добавить пользователя в таблицу");
+        }
+        return user;
+    }
+    
+     public static User createUserIfNotExists(User user) throws InvalidInsertException{
+        
+        
+        try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
+            boolean hasResult = statement.execute(String.format(
+                     "SELECT * FROM Users WHERE login = '%s'",
+                            user.getLogin()
+                    ));
+            if (hasResult) {
+                ResultSet resultSet = statement.getResultSet();
+                if(!resultSet.next()){ //Если в результате есть хотя бы одна строка с таким логином, значит мы не можем добавить этого пользователя
+                    statement.execute(String.format( "INSERT INTO Users VALUES ('%s', '%s', %b, %b); ",
+                            user.getLogin(),
+                            user.getPasswordHash(),
+                            user.getVoted(),
+                            user.getIsAdmin()
+                    ));
+                }
+            } else throw new SQLException();
         }catch (SQLException E){
             throw new InvalidInsertException("Не удалось добавить пользователя в таблицу");
         }
@@ -51,8 +75,7 @@ public class UserDAO {
     public static User findUser(String login) throws SQLException, NoSuchUserException{
         try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
             boolean hasResult = statement.execute(String.format(
-                    "SELECT * FROM Users " +
-                            "WHERE login = '%s'",
+                    "SELECT * FROM Users WHERE login = '%s'",
                     login
             ));
             if (hasResult) {
@@ -77,19 +100,14 @@ public class UserDAO {
 
          try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
             boolean hasResult = statement.execute(String.format(
-                    "SELECT * FROM Users " +
-                            "WHERE login = '%s'",
+                    "SELECT * FROM Users WHERE login = '%s'",
                     user.getLogin()
             ));
             if (hasResult) {
                 ResultSet resultSet = statement.getResultSet();
                 if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким номером, значит мы не можем обновить этого пользователя
                     statement.execute(String.format(
-                            "UPDATE Users " +
-                                    "SET passwordHash = '%s', " +
-                                    "voted = %b, " +
-                                    "isAdmin = %b " +
-                                    "WHERE login = '%s'",
+                            "UPDATE Users SET passwordHash = '%s', voted = %b, isAdmin = %b WHERE login = '%s'",
                             user.getPasswordHash(),
                             user.getVoted(),
                             user.getIsAdmin(),
@@ -108,9 +126,7 @@ public class UserDAO {
        
        try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
             statement.execute(String.format(
-                     "SELECT * FROM Users " +
-                             "WHERE login = '%s' AND "
-                             + "passwordHash = '%s'" ,
+                     "SELECT * FROM Users WHERE login = '%s' AND passwordHash = '%s'" ,
                             login, hash
                     ));
             return statement.getResultSet().next(); //Возвращает true, если нашли 1 строку
@@ -122,9 +138,7 @@ public class UserDAO {
        
         try (Statement statement = ConnectionUtil.getConnection().createStatement()){
             statement.execute(String.format(
-                     "SELECT * FROM Users " +
-                             "WHERE login = '%s' AND "
-                             + "isAdmin = true" ,
+                     "SELECT * FROM Users WHERE login = '%s' AND isAdmin = true" ,
                             login
                     ));
             return statement.getResultSet().next(); //Возвращает true, если нашли одну строчку
@@ -147,9 +161,7 @@ public class UserDAO {
         
         try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
             statement.execute(String.format(
-                            "UPDATE Users " +
-                                    "SET " +
-                                    "voted = false " 
+                            "UPDATE Users SET voted = false " 
                     ));
         }
     }

@@ -20,11 +20,8 @@ public class TableCreator {
         try {
             Statement statement = ConnectionUtil.getConnection().createStatement();
             statement.execute(
-                    "CREATE TABLE Users(" +
-                            "                   login VARCHAR(255) NOT NULL," +
-                            "                   passwordHash VARCHAR(255) NOT NULL, " +
-                            "                   voted BOOLEAN NOT NULL, " +
-                            "                   isAdmin BOOLEAN NOT NULL) ");
+                    "CREATE TABLE IF NOT EXISTS Users(login VARCHAR(255) NOT NULL, passwordHash VARCHAR(255) NOT NULL, voted BOOLEAN NOT NULL, isAdmin BOOLEAN NOT NULL) "
+            );
         } catch(SQLException e){
             throw new InvalidTableCreationException("Не удалось создать таблицу пользователей.");
         }
@@ -34,13 +31,8 @@ public class TableCreator {
         try {
             Statement statement = ConnectionUtil.getConnection().createStatement();
             statement.execute(
-                    "CREATE TABLE Candidates(" +
-                            "                   name VARCHAR(255) NOT NULL, " +
-                            "                   yearOfBirth INT, " +
-                            "                   placeOfLiving VARCHAR(255), " +
-                            "                   party VARCHAR(255), " +
-                            "                   information VARCHAR(1000),  "+
-                            "                   votes INT);" ) ;
+                    "CREATE TABLE IF NOT EXISTS Candidates(name VARCHAR(255) NOT NULL, yearOfBirth INT, placeOfLiving VARCHAR(255), party VARCHAR(255), information VARCHAR(1000), votes INT);" 
+            );
         } catch(SQLException e){
             throw new InvalidTableCreationException("Не удалось создать таблицу кандидатов.");
         }
@@ -50,9 +42,7 @@ public class TableCreator {
         try {
             Statement statement = ConnectionUtil.getConnection().createStatement();
             statement.execute(
-                    "CREATE TABLE ElectionsTime(" +
-                            "                   dateTimeOfBegining datetime NOT NULL," +
-                            "                   dateTimeOfEnding datetime NOT NULL)");
+                    "CREATE TABLE IF NOT EXISTS ElectionsTime(dateTimeOfBegining datetime NOT NULL, dateTimeOfEnding datetime NOT NULL)");
                          
         } catch(SQLException e){
             throw new InvalidTableCreationException("Не удалось создать таблицу времени выборов.");

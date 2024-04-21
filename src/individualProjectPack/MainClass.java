@@ -43,7 +43,7 @@ public class MainClass {
     
     
     public static void clearTables(){
-             //Это обычно не нужно. Тут мы просто криво созданные таблицы удаляем. Удалить потом.
+        //Это обычно не нужно. Тут мы просто криво созданные таблицы удаляем. Удалить потом.
         try{
             TableDestroyer.dropAllTable();
         } catch(InvalidTableDestroyException e){
@@ -87,15 +87,10 @@ public class MainClass {
            
             ConnectionUtil.setConnection(connection);
             
-            try{
-                TableCreator.createUserTable();
-                UserDAO.createUser(User.hashAndCreate("admin", "admin", true, true));
-                TableCreator.createCandidateTable();
-                TableCreator.createElectionTimeTable();
-            } catch(InvalidTableCreationException e){
-                //Тут ничего не делаем, т.к. если не получилось создать таблицы, значит они уже есть.
-                //Но вообще по-хорошему надо как-то сделать проверку на существование таблиц.
-            }
+            TableCreator.createUserTable();
+            UserDAO.createUserIfNotExists(User.hashAndCreate("admin", "admin", true, true));
+            TableCreator.createCandidateTable();
+            TableCreator.createElectionTimeTable();
             
             if(SQLUtil.checkIfElectionsExist()){
                 Elections.setTimeOfBegining(SQLUtil.getBeginingTime());
@@ -112,15 +107,10 @@ public class MainClass {
             
             
        } catch (
-               InvalidInsertException |
-               NoElectionsException e){
-           InfoFrame errorFrame = new InfoFrame();
-           errorFrame.setErrorLabel(e.getMessage());
-           errorFrame.setVisible(true);
-       } catch (NoCandidatesException e){
-           InfoFrame errorFrame = new InfoFrame();
-           errorFrame.setErrorLabel(e.getMessage());
-           errorFrame.setVisible(true);
+               InvalidTableCreationException |
+               NoElectionsException |
+               NoCandidatesException |
+               InvalidInsertException e){
        }  catch (SQLException e){
            InfoFrame errorFrame = new InfoFrame();
            errorFrame.setErrorLabel("SQL-ошибка");

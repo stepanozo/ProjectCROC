@@ -28,8 +28,7 @@ public class CandidateDAO {
         
         try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
             boolean hasResult = statement.execute(String.format(
-                     "SELECT * FROM Candidates " +
-                             "WHERE name = '%s'",
+                     "SELECT * FROM Candidates WHERE name = '%s'",
                             candidate.getName()
                     ));
             if (hasResult) {
@@ -44,7 +43,7 @@ public class CandidateDAO {
                        candidate.getParty(),
                        candidate.getInformation()
                ));
-            }
+            } else throw new SQLException();
         }catch (SQLException E){
             throw new InvalidInsertException("Не удалось добавить кандидата в таблицу");
         }
@@ -54,8 +53,7 @@ public class CandidateDAO {
      public static Candidate findCandidate(String name) throws SQLException, NoSuchCandidateException{
         try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
             boolean hasResult = statement.execute(String.format(
-                    "SELECT * FROM Candidates " +
-                            "WHERE name = '%s'",
+                    "SELECT * FROM Candidates WHERE name = '%s'",
                     name
             ));
             if (hasResult) {
@@ -82,22 +80,14 @@ public class CandidateDAO {
 
          try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
             boolean hasResult = statement.execute(String.format(
-                    "SELECT * FROM Candidates " +
-                            "WHERE name = '%s'",
+                    "SELECT * FROM Candidates WHERE name = '%s'",
                     candidate.getName()
             ));
             if (hasResult) {
                 ResultSet resultSet = statement.getResultSet();
                 if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким именем, значит мы не можем обновить этого кандидата
                     statement.execute(String.format(
-                            "UPDATE Candidates " +
-                                    "SET name = '%s', " +
-                                    "yearOfBirth = '%s', " +
-                                    "placeOfLiving = '%s', " +
-                                    "party = '%s', " +
-                                    "information = '%s', " +
-                                    "votes = %d " +
-                                    "WHERE name = '%s'",
+                            "UPDATE Candidates SET name = '%s', yearOfBirth = '%s', placeOfLiving = '%s', party = '%s', information = '%s', votes = %d WHERE name = '%s'",
                             candidate.getName(),
                             candidate.getYearOfBirth(),
                             candidate.getPlaceOfLiving(),
@@ -118,18 +108,15 @@ public class CandidateDAO {
 
          try (Statement statement = ConnectionUtil.getConnection().createStatement()) {
             boolean hasResult = statement.execute(String.format(
-                     "SELECT * FROM Candidates " +
-                            "WHERE name = '%s'",
+                     "SELECT * FROM Candidates WHERE name = '%s'",
                     candidate.getName()
             ));
             if (hasResult) {
                 ResultSet resultSet = statement.getResultSet();
-                if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким именем, значит мы не можем обновить этого кандидата
+                if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким именем, значит мы можем обновить этого кандидата
                     statement.execute(String.format(
-                            "UPDATE Candidates " +
-                                    "SET votes = votes + 1 " +
-                                    "WHERE name = '%s'",
-                                    candidate.getName()
+                            "UPDATE Candidates SET votes = votes + 1 WHERE name = '%s'",
+                            candidate.getName()
                     ));
                 } else
                     throw new NoSuchCandidateException("Такого кандидата нет: " + candidate.getName(), candidate.getName());
