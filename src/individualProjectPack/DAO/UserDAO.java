@@ -22,11 +22,7 @@ public class UserDAO {
     
     public static User createUser(User user) throws InvalidInsertException{
               
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(String.format(
                      "SELECT * FROM Users WHERE login = '%s'",
@@ -52,12 +48,7 @@ public class UserDAO {
     
      public static User createUserIfNotExists(User user) throws InvalidInsertException{
         
-        
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(String.format(
                      "SELECT * FROM Users WHERE login = '%s'",
@@ -81,11 +72,7 @@ public class UserDAO {
     }
     
     public static User findUser(String login) throws SQLException, NoSuchUserException{
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(String.format(
                     "SELECT * FROM Users WHERE login = '%s'",
@@ -111,11 +98,7 @@ public class UserDAO {
     
         public static User updateUser(User user) throws SQLException, NoSuchUserException {
 
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(String.format(
                     "SELECT * FROM Users WHERE login = '%s'",
@@ -142,11 +125,7 @@ public class UserDAO {
     public static boolean successfulLogIn(String login, String password) throws SQLException{
         String hash = MD5Hashing.hashPassword(password);
        
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             statement.execute(String.format(
                      "SELECT * FROM Users WHERE login = '%s' AND passwordHash = '%s'" ,
@@ -159,11 +138,7 @@ public class UserDAO {
     
     public static boolean checkIfAdmin(String login) throws SQLException{
        
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             statement.execute(String.format(
                      "SELECT * FROM Users WHERE login = '%s' AND isAdmin = true" ,
@@ -200,11 +175,7 @@ public class UserDAO {
     
     public static HashSet<User> getUsers() throws NoUsersException, SQLException{
            
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(
                     "SELECT * FROM Users "

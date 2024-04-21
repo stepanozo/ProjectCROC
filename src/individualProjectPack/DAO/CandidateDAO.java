@@ -23,11 +23,7 @@ public class CandidateDAO {
     
     public static Candidate createCandidate(Candidate candidate) throws InvalidInsertException{
         
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(String.format(
                      "SELECT * FROM Candidates WHERE name = '%s'",
@@ -53,11 +49,7 @@ public class CandidateDAO {
     }
     
      public static Candidate findCandidate(String name) throws SQLException, NoSuchCandidateException{
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(String.format(
                     "SELECT * FROM Candidates WHERE name = '%s'",
@@ -85,11 +77,7 @@ public class CandidateDAO {
     
     public static Candidate updateCandidate(Candidate candidate) throws SQLException, NoSuchCandidateException {
 
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(String.format(
                     "SELECT * FROM Candidates WHERE name = '%s'",
@@ -118,11 +106,7 @@ public class CandidateDAO {
     
     public static void voteForCandidate(Candidate candidate) throws SQLException, NoSuchCandidateException {
 
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(String.format(
                      "SELECT * FROM Candidates WHERE name = '%s'",
@@ -144,11 +128,7 @@ public class CandidateDAO {
     
     public static HashSet<Candidate> getCandidates() throws NoCandidatesException, SQLException{
            
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(
                     "SELECT * FROM Candidates "

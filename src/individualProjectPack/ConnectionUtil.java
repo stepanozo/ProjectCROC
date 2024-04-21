@@ -35,4 +35,8 @@ public class ConnectionUtil {
         password = newPassword;
     }
     
+    public static Connection getConnection() throws SQLException{
+        return DriverManager.getConnection(url, user,password);
+    }
+    
 }
