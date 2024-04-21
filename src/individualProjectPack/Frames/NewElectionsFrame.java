@@ -170,7 +170,6 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                     if(SQLUtil.checkIfElectionsExist()){ //Здесь мы должны сгрузить в файл информацию о предыдущих выборах, если они были
 
                         if(SQLUtil.getEndingTime().isBefore(LocalDateTime.now())){
-                            //TODO ЗДЕСЬ СДЕЛАТЬ ВЫГРУЗКУ ДАННЫХ В ФАЙЛ
                             savePreviousElections();
                         }
                     }

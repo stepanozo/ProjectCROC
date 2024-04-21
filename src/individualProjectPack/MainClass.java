@@ -84,7 +84,6 @@ public class MainClass {
        try{
             Connection connection = DriverManager.
                    getConnection("jdbc:h2:/test", "sa", "");
-                //getConnection("jdbc:h2:mem:~/test", "sa", "");
            
             ConnectionUtil.setConnection(connection);
             
