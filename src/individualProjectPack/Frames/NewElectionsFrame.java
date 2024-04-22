@@ -168,10 +168,7 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                     
                     
                     if(SQLUtil.checkIfElectionsExist()){ //Здесь мы должны сгрузить в файл информацию о предыдущих выборах, если они были
-
-                        if(SQLUtil.getEndingTime().isBefore(LocalDateTime.now())){
-                            savePreviousElections();
-                        }
+                        savePreviousElections();
                     }
                     
                     ArrayList<Candidate> candidates = FilesUtil.getCandidatesFromFiles(candidateFolderPathField.getText());
@@ -188,6 +185,9 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                     }
                     
                     //Теперь запустим ожидание конца выборов.
+                    if(MainClass.getWaiterThread() != null && MainClass.getWaiterThread().isAlive()) 
+                        Waiter.setExit(true); //Прерываем старый поток, чтобы он не выдал внезапно результаты старых выборов
+                    Waiter.setExit(false);
                     MainClass.setWaiterThread(new Thread(Waiter.getInstance()));
                     MainClass.getWaiterThread().start();
                     
@@ -226,13 +226,18 @@ public class NewElectionsFrame extends javax.swing.JFrame {
 
     
     private void savePreviousElections() throws SQLException, NoElectionsException, NoCandidatesException, NoUsersException{
-        File filePath = new File("Save");
-        filePath.mkdir();
+        
+        String currentDir = System.getProperty("user.dir");
+        File folder = new File(currentDir + "\\Save");
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        String path = folder.getPath();
         
         int i = 1;
-        File file = new File(filePath + "\\Elections" + i +".txt");
+        File file = new File(folder + "\\Elections" + i +".txt");
         while(file.exists()){
-            file = new File(filePath + "\\Election" + i +".txt");
+            file = new File(folder + "\\Elections" + i +".txt");
             i++;
         }
         try(FileWriter writer = new FileWriter(file.getPath())) {;

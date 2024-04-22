@@ -17,12 +17,21 @@ import java.sql.SQLException;
  */
 public class Waiter implements Runnable {
     
-    private long delay = 1L;
+    private static long delay = 1L;
+    private static volatile boolean  exit = false;
 
     private static Waiter waiter = new Waiter();
     
     public static Waiter getInstance(){
         return waiter;
+    }
+    
+    public static boolean getExit(){
+        return exit;
+    }
+    
+    public static void setExit(boolean value){
+        exit = value;
     }
     
     private Waiter(){
@@ -31,11 +40,11 @@ public class Waiter implements Runnable {
     
     private void waitForTime(LocalDateTime dateTime){
         //Здесь ждём какого-то времени, ничего не делаем
-        while(LocalDateTime.now().isBefore(dateTime)){
+        while(LocalDateTime.now().isBefore(dateTime) && !exit){
             try {
                 Thread.sleep(delay);
             } catch (InterruptedException e){
-                throw new RuntimeException(); //Возможно здесь можно что-то умнее придумать, чем рантайм исключение
+                MainClass.showInfoFrame("Действующие выборы остановлены.");
             }
         }
     }

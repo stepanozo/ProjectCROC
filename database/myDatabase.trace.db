@@ -28,3 +28,9 @@ The object is already closed [90007-224]
 2024-04-22 21:58:29.143359+03:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLNonTransientException: Объект уже закрыт
 The object is already closed [90007-224]
+2024-04-23 00:10:54.728109+03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ELECTIONSTIME" not found (this database is empty); SQL statement:
+SELECT * FROM ElectionsTime [42104-224]
+2024-04-23 00:10:59.827022+03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ELECTIONSTIME" not found (this database is empty); SQL statement:
+SELECT * FROM ElectionsTime [42104-224]
