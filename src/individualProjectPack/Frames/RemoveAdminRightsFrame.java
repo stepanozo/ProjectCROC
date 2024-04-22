@@ -4,6 +4,7 @@ import individualProjectPack.DAO.UserDAO;
 import individualProjectPack.Exceptions.*;
 import individualProjectPack.MainClass;
 import java.sql.*;
+import java.util.Objects;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -104,19 +105,24 @@ public class RemoveAdminRightsFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        try{//Проверим, что пользователь всё ещё админ
-            if(UserDAO.checkIfAdmin(MainClass.getMyLogin())){
-                UserDAO.setAdminRights(loginField.getText(), false);
-                dispose();
-            }else {
-                blockAdminButtons();
-                adminFrame.blockAdminButtons();
-                adminFrame.notAdminAnymore();
+        
+        if(Objects.equals(loginField.getText(),MainClass.getMyLogin()))
+            MainClass.showInfoFrame("Нельзя указывать себя.");
+        else{ 
+            try{//Проверим, что пользователь всё ещё админ
+                if(UserDAO.checkIfAdmin(MainClass.getMyLogin())){
+                    UserDAO.setAdminRights(loginField.getText(), false);
+                    dispose();
+                }else {
+                    blockAdminButtons();
+                    adminFrame.blockAdminButtons();
+                    adminFrame.notAdminAnymore();
+                }
+            } catch(NoSuchUserException | AlreadyAdminException | NotAdminException e){
+               MainClass.showInfoFrame(e.getMessage());
+            } catch(SQLException e){
+               MainClass.showInfoFrame("SQL-ошибка");
             }
-        } catch(NoSuchUserException | AlreadyAdminException | NotAdminException e){
-           MainClass.showInfoFrame(e.getMessage());
-        } catch(SQLException e){
-           MainClass.showInfoFrame("SQL-ошибка");
         }
     }//GEN-LAST:event_removeButtonActionPerformed
 
