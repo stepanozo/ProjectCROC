@@ -174,12 +174,11 @@ public class NewElectionsFrame extends javax.swing.JFrame {
                         }
                     }
                     
-
+                    ArrayList<Candidate> candidates = FilesUtil.getCandidatesFromFiles(candidateFolderPathField.getText());
                     SQLUtil.newTimeOfElections(beginTime, endTime);
                     Elections.setTimeOfBegining(beginTime);
                     Elections.setTimeOfEnding(endTime);
                 
-                    ArrayList<Candidate> candidates = FilesUtil.getCandidatesFromFiles(candidateFolderPathField.getText());
                     Elections.deleteAllCandidates();
                     UserDAO.forgetAllVotes();
                     SQLUtil.newCandidateTable();
