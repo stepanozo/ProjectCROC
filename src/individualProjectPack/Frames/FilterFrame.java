@@ -171,7 +171,7 @@ public class FilterFrame extends javax.swing.JFrame {
             if(partyCheckbox.isSelected())
                 pred = pred.and(candidate -> Objects.equals(candidate.getParty(), partyTextField.getText()));
             if(cityCheckbox.isSelected())
-                pred = pred.and(candidate -> Objects.equals(candidate.getPlaceOfLiving(), partyTextField.getText()));
+                pred = pred.and(candidate -> Objects.equals(candidate.getPlaceOfLiving(), cityTextField.getText()));
 
 
             voteFrame.showCandidates(

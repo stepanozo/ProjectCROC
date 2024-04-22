@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package individualProjectPack.Frames;
+import individualProjectPack.ConnectionUtil;
 import individualProjectPack.DAO.CandidateDAO;
 import individualProjectPack.TableClasses.Candidate;
 import java.util.HashSet;
@@ -22,6 +23,8 @@ import java.util.HashMap;
  */
 public class VoteFrame extends javax.swing.JFrame {
 
+    
+    private boolean mustCloseConnection;
     private final int MAX_CANDIDATES = 8;
     private JCheckBox[] checkBoxArray;
     private JButton[] candidateButtonsArray;
@@ -31,9 +34,14 @@ public class VoteFrame extends javax.swing.JFrame {
     /**
      * Creates new form VoteFrame
      */
+    public void setMustCloseConnection(boolean value){
+        mustCloseConnection = value;
+    }
+    
     public VoteFrame() {
         setLocationRelativeTo(null);
         initComponents();
+        mustCloseConnection = true;
         checkBoxArray = new JCheckBox[]{
         jCheckBox0,
         jCheckBox1,
@@ -72,6 +80,7 @@ public class VoteFrame extends javax.swing.JFrame {
         }
     }
 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -104,6 +113,11 @@ public class VoteFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         filterButton.setText("Фильтр по критериям");
         filterButton.setToolTipText("");
@@ -360,6 +374,7 @@ public class VoteFrame extends javax.swing.JFrame {
     
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         
+
         try{
             if(UserDAO.checkIfAdmin(MainClass.getMyLogin())){
                 new AdminFrame().setVisible(true);
@@ -367,6 +382,7 @@ public class VoteFrame extends javax.swing.JFrame {
                 LogInFrame logInFrame = new LogInFrame();
                 logInFrame.setVisible(true);
             }
+            mustCloseConnection = false;
         } catch (SQLException e){
             LogInFrame logInFrame = new LogInFrame();
             logInFrame.setVisible(true);
@@ -420,9 +436,7 @@ public class VoteFrame extends javax.swing.JFrame {
 
     private void voteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voteButtonActionPerformed
         if(choice == -1){
-            InfoFrame infoFrame = new InfoFrame();
-            infoFrame.setErrorLabel("Сначала выберите кандидата");
-            infoFrame.setVisible(true);
+            MainClass.showInfoFrame("Сначала выберите кандидата");
         } else try{
             
             User user = UserDAO.findUser(MainClass.getMyLogin());
@@ -432,13 +446,9 @@ public class VoteFrame extends javax.swing.JFrame {
                 UserDAO.updateUser(user);
                 voteButton.setEnabled(false);
                 
-                InfoFrame infoFrame = new InfoFrame();
-                infoFrame.setErrorLabel("Ваш голос успешно зарегистрирован!");
-                infoFrame.setVisible(true);
+                MainClass.showInfoFrame("Ваш голос успешно зарегистрирован");
             } else {
-                InfoFrame errorFrame = new InfoFrame();
-                errorFrame.setErrorLabel("Вы уже голосовали");
-                errorFrame.setVisible(true);
+                MainClass.showInfoFrame("Вы уже голосовали");
                 voteButton.setEnabled(false);
             }
         } catch (NoSuchCandidateException e){
@@ -500,6 +510,14 @@ public class VoteFrame extends javax.swing.JFrame {
     private void cancelFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelFilterActionPerformed
         showCandidates(Elections.getCandidates());
     }//GEN-LAST:event_cancelFilterActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        
+        try{
+        if(mustCloseConnection)
+            ConnectionUtil.closeConnection();
+        } catch (SQLException e) {MainClass.showInfoFrame("Не удалось закрыть соединение");}
+    }//GEN-LAST:event_formWindowClosed
 
     
     public void enableAllButtons(boolean value){

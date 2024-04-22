@@ -5,6 +5,7 @@
  */
 package individualProjectPack.Frames;
 
+import individualProjectPack.ConnectionUtil;
 import java.sql.*;
 import individualProjectPack.DAO.*;
 import individualProjectPack.Elections;
@@ -18,10 +19,13 @@ import java.time.LocalDateTime;
 public class LogInFrame extends javax.swing.JFrame {
 
     
+    private boolean mustCloseConnection;
+    
     /**
      * Creates new form logInFrame
      */
     public LogInFrame() {
+        mustCloseConnection = true;
         setLocationRelativeTo(null);
         initComponents();
         connectionErrorLabel.setVisible(false);
@@ -47,6 +51,11 @@ public class LogInFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         loginButton.setText("Войти");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
@@ -145,6 +154,7 @@ public class LogInFrame extends javax.swing.JFrame {
                         if(UserDAO.checkIfAdmin(login)){
                             AdminFrame adminFrame = new AdminFrame();
                             adminFrame.setVisible(true);
+                            mustCloseConnection = false;
                             dispose();
                         }else{ 
                             if(SQLUtil.checkIfElectionsExist() &&
@@ -157,6 +167,7 @@ public class LogInFrame extends javax.swing.JFrame {
                                     ElectionsResultFrame resultFrame = new ElectionsResultFrame();
                                     resultFrame.setVisible(true);
                                 }
+                                mustCloseConnection = false;
                                 dispose();
                             }
                             else{
@@ -171,6 +182,13 @@ public class LogInFrame extends javax.swing.JFrame {
            wrongPasswordLabel.setText("Ошибка входа.");
        }
     }//GEN-LAST:event_loginButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        try{
+            if(mustCloseConnection)
+                ConnectionUtil.closeConnection();
+        } catch (SQLException e) {MainClass.showInfoFrame("Не удалось закрыть соединение");}
+    }//GEN-LAST:event_formWindowClosed
 
     private boolean isLoginCorrect(String login){
         return login.matches("[a-zA-Z0-9_]+") && login.length() >=5;

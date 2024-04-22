@@ -22,7 +22,8 @@ public class UserDAO {
     
     public static User createUser(User user) throws InvalidInsertException{
               
-        try (Connection connection = ConnectionUtil.getConnection()) {
+        try{
+            Connection connection = ConnectionUtil.getConnection();
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(String.format(
                      "SELECT * FROM Users WHERE login = '%s'",
@@ -48,7 +49,8 @@ public class UserDAO {
     
      public static User createUserIfNotExists(User user) throws InvalidInsertException{
         
-        try (Connection connection = ConnectionUtil.getConnection()) {
+        try{
+            Connection connection = ConnectionUtil.getConnection();
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(String.format(
                      "SELECT * FROM Users WHERE login = '%s'",
@@ -72,80 +74,74 @@ public class UserDAO {
     }
     
     public static User findUser(String login) throws SQLException, NoSuchUserException{
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            Statement statement = connection.createStatement();
-            boolean hasResult = statement.execute(String.format(
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        boolean hasResult = statement.execute(String.format(
                     "SELECT * FROM Users WHERE login = '%s'",
                     login
-            ));
-            if (hasResult) {
-                ResultSet resultSet = statement.getResultSet();
-                if(resultSet.next()){ //Если в результате есть хотя бы одна строка с таким логином, она нам и нужна
-                    User userResult = new User(
+        ));
+        if (hasResult) {
+            ResultSet resultSet = statement.getResultSet();
+            if(resultSet.next()){ //Если в результате есть хотя бы одна строка с таким логином, она нам и нужна
+                User userResult = new User(
                             resultSet.getString("login"),
                             resultSet.getString("passwordHash"),
                             resultSet.getBoolean("voted"),
                             resultSet.getBoolean("isAdmin")
-                    );
-                    return userResult;
-                }
-
-                throw new NoSuchUserException("Такого пользователя нет: " + login, login);
+                );
+                return userResult;
             }
-            throw new SQLException();
+
+            throw new NoSuchUserException("Такого пользователя нет: " + login, login);
         }
+        throw new SQLException();
     }
     
         public static User updateUser(User user) throws SQLException, NoSuchUserException {
 
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            Statement statement = connection.createStatement();
-            boolean hasResult = statement.execute(String.format(
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        boolean hasResult = statement.execute(String.format(
                     "SELECT * FROM Users WHERE login = '%s'",
                     user.getLogin()
-            ));
-            if (hasResult) {
-                ResultSet resultSet = statement.getResultSet();
-                if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким номером, значит мы не можем обновить этого пользователя
-                    statement.execute(String.format(
+        ));
+        if (hasResult) {
+            ResultSet resultSet = statement.getResultSet();
+            if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким номером, значит мы не можем обновить этого пользователя
+                statement.execute(String.format(
                             "UPDATE Users SET passwordHash = '%s', voted = %b, isAdmin = %b WHERE login = '%s'",
                             user.getPasswordHash(),
                             user.getVoted(),
                             user.getIsAdmin(),
                             user.getLogin()
-                    ));
-                    return user;
-                }
-                throw new NoSuchUserException("Такого пользователя нет: " + user.getLogin(), user.getLogin());
+                ));
+                return user;
             }
-            throw new SQLException();
+            throw new NoSuchUserException("Такого пользователя нет: " + user.getLogin(), user.getLogin());
         }
+        throw new SQLException();
     }
     
     public static boolean successfulLogIn(String login, String password) throws SQLException{
         String hash = MD5Hashing.hashPassword(password);
-       
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(String.format(
-                     "SELECT * FROM Users WHERE login = '%s' AND passwordHash = '%s'" ,
-                            login, hash
-                    ));
-            return statement.getResultSet().next(); //Возвращает true, если нашли 1 строку
-        
-        }
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        statement.execute(String.format(
+                "SELECT * FROM Users WHERE login = '%s' AND passwordHash = '%s'" ,
+                        login, hash
+                ));
+        return statement.getResultSet().next(); //Возвращает true, если нашли 1 строку
+
     }
     
-    public static boolean checkIfAdmin(String login) throws SQLException{
-       
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(String.format(
-                     "SELECT * FROM Users WHERE login = '%s' AND isAdmin = true" ,
-                            login
-                    ));
-            return statement.getResultSet().next(); //Возвращает true, если нашли одну строчку
-        }
+    public static boolean checkIfAdmin(String login) throws SQLException{   
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        statement.execute(String.format(
+                 "SELECT * FROM Users WHERE login = '%s' AND isAdmin = true" ,
+                        login
+                ));
+        return statement.getResultSet().next(); //Возвращает true, если нашли одну строчку
     }
     
     
@@ -161,45 +157,38 @@ public class UserDAO {
     }
     
     public static void forgetAllVotes() throws SQLException{
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
-            Statement statement = connection.createStatement();
-            statement.execute(String.format(
-                            "UPDATE Users SET voted = false " 
-                    ));
-        }
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        statement.execute(String.format(
+                        "UPDATE Users SET voted = false " 
+                ));
     }
     
     public static HashSet<User> getUsers() throws NoUsersException, SQLException{
            
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            Statement statement = connection.createStatement();
-            boolean hasResult = statement.execute(
-                    "SELECT * FROM Users "
-            );
-            if (hasResult) {
-                HashSet<User> users = new HashSet();
-                ResultSet resultSet = statement.getResultSet();
-                boolean flg = false;
-                while (resultSet.next()) {//Если в результате есть хотя бы одна строка, значит кандидаты есть.
-                    flg = true;
-                    users.add(new User(
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        boolean hasResult = statement.execute(
+                "SELECT * FROM Users "
+        );
+        if (hasResult) {
+            HashSet<User> users = new HashSet();
+            ResultSet resultSet = statement.getResultSet();
+            boolean flg = false;
+            while (resultSet.next()) {//Если в результате есть хотя бы одна строка, значит кандидаты есть.
+                flg = true;
+                users.add(new User(
                             resultSet.getString("login"),
                             resultSet.getString("passwordHash"),
                             resultSet.getBoolean("voted"),
                             resultSet.getBoolean("isAdmin")
                   
-                    ));
-                }
-                if(!flg)
-                    throw new NoUsersException("Пользователей нет.");
-                else return users;
+                ));
             }
-            throw new SQLException();
+            if(!flg)
+                throw new NoUsersException("Пользователей нет.");
+            else return users;
         }
+        throw new SQLException();
     }
-    
 }

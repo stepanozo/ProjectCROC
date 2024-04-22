@@ -17,12 +17,15 @@ import java.time.LocalDateTime;
  */
 public class AdminFrame extends javax.swing.JFrame {
 
+    private boolean mustCloseConnection;
+    
     /**
      * Creates new form AdminFrame
      */
     public AdminFrame() {
         setLocationRelativeTo(null);
         initComponents();
+        mustCloseConnection = true;
     }
     public void enableAllButtons(){
         newElectionsButton.setEnabled(true);
@@ -53,6 +56,9 @@ public class AdminFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
@@ -166,6 +172,7 @@ public class AdminFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_newElectionsButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+        mustCloseConnection = false;
         new LogInFrame().setVisible(true);
         dispose();
     }//GEN-LAST:event_exitButtonActionPerformed
@@ -219,7 +226,8 @@ public class AdminFrame extends javax.swing.JFrame {
                 } else{
                     ElectionsResultFrame resultFrame = new ElectionsResultFrame();
                     resultFrame.setVisible(true);
-                    }
+                }
+                mustCloseConnection = false;
                 dispose();
             }
             else{
@@ -233,6 +241,13 @@ public class AdminFrame extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
 
     }//GEN-LAST:event_formWindowClosing
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        try{
+            if(mustCloseConnection)
+                ConnectionUtil.closeConnection();
+        } catch (SQLException e) {MainClass.showInfoFrame("Не удалось закрыть соединение");}
+    }//GEN-LAST:event_formWindowClosed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addAdminRightsButton;

@@ -15,6 +15,8 @@ public class ConnectionUtil {
     private static String user;
     private static String password;
     
+    private static Connection connection;
+    
     public static String getUrl(){
         return url;
     }
@@ -35,8 +37,21 @@ public class ConnectionUtil {
         password = newPassword;
     }
     
-    public static Connection getConnection() throws SQLException{
+    public static Connection getNewConnection() throws SQLException{
+        connection.close();
         return DriverManager.getConnection(url, user,password);
+    }
+    
+    public static Connection getConnection() throws SQLException{
+        return connection;
+    }
+    
+    public static void closeConnection() throws SQLException{
+        connection.close();
+    }
+    
+    public static void setConnection(Connection newConnection) throws SQLException{
+        connection = newConnection;
     }
     
 }

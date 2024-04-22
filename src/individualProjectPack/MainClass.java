@@ -91,7 +91,7 @@ public class MainClass {
             ConnectionUtil.setUrl(url);
             ConnectionUtil.setUser(user);
             ConnectionUtil.setPassword(password);
-            
+            ConnectionUtil.setConnection(DriverManager.getConnection(url, user,password));
             TableCreator.createUserTable();
             UserDAO.createUserIfNotExists(User.hashAndCreate("admin", "admin", true, true));
             TableCreator.createCandidateTable();

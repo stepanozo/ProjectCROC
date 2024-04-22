@@ -17,7 +17,8 @@ public class TableDestroyer {
     }
       
     public static void dropUserTable() throws InvalidTableDestroyException {
-        try (Connection connection = ConnectionUtil.getConnection()) {
+        try{
+            Connection connection = ConnectionUtil.getConnection();
             Statement statement = connection.createStatement();
             statement.execute(
                     "DROP TABLE Users");
@@ -27,7 +28,8 @@ public class TableDestroyer {
     }
     
     public static void dropCandidateTable() throws InvalidTableDestroyException {
-        try (Connection connection = ConnectionUtil.getConnection()) {
+        try{
+            Connection connection = ConnectionUtil.getConnection();
             Statement statement = connection.createStatement();
             statement.execute(
                     "DROP TABLE Candidates");
@@ -37,7 +39,8 @@ public class TableDestroyer {
     }
     
     public static void dropElectionTimeTable() throws InvalidTableDestroyException {
-        try (Connection connection = ConnectionUtil.getConnection()) {
+        try{
+            Connection connection = ConnectionUtil.getConnection();
             Statement statement = connection.createStatement();
             statement.execute(
                     "DROP TABLE ElectionsTime");

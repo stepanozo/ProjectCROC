@@ -18,11 +18,8 @@ public class SQLUtil {
     
     public static void newTimeOfElections(LocalDateTime beginTime, LocalDateTime endTime) throws InvalidInsertException{
         
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try{
+                Connection connection = ConnectionUtil.getConnection();
                 Statement statement = connection.createStatement();
                 statement.execute(
                      "TRUNCATE TABLE ElectionsTime "      
@@ -38,11 +35,8 @@ public class SQLUtil {
     
     public static void newCandidateTable() throws InvalidTableDestroyException{
         
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
+        try{
+                Connection connection = ConnectionUtil.getConnection();
                 Statement statement = connection.createStatement();
                 statement.execute(
                      "TRUNCATE TABLE Candidates "      
@@ -53,65 +47,50 @@ public class SQLUtil {
     }
     
     public static boolean checkIfElectionsExist() throws SQLException{
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
-            Statement statement = connection.createStatement();
-            statement.execute(
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        statement.execute(
                      "SELECT * FROM ElectionsTime"
-            );
-            ResultSet result = statement.getResultSet();
+        );
+        ResultSet result = statement.getResultSet();
                               
-            return result.next();
-        }
+        return result.next();
     }
     
     public static LocalDateTime getBeginingTime() throws NoElectionsException, SQLException{
         if(!checkIfElectionsExist())
             throw new NoElectionsException("Попытка получить начало несуществующих выборов");
         
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
-            Statement statement = connection.createStatement();
-            statement.execute(
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        statement.execute(
                      "SELECT dateTimeOfBegining FROM ElectionsTime"
-            );
-            ResultSet result = statement.getResultSet();
-            if(result.next()){
-                String dateString = result.getString("dateTimeOfBegining");
-                LocalDateTime date = LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                return date;
-            }
-            throw new NoElectionsException("Время начала выборов не назначено");
-            
+        );
+        ResultSet result = statement.getResultSet();
+        if(result.next()){
+            String dateString = result.getString("dateTimeOfBegining");
+            LocalDateTime date = LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            return date;
         }
+        throw new NoElectionsException("Время начала выборов не назначено");  
     }
     
     public static LocalDateTime getEndingTime() throws NoElectionsException, SQLException{
         if(!checkIfElectionsExist())
             throw new NoElectionsException("Попытка получить конец несуществующих выборов");
         
-        try (Connection connection = DriverManager.
-                getConnection(
-                        ConnectionUtil.getUrl(),
-                        ConnectionUtil.getUser(),
-                        ConnectionUtil.getPassword())) {
-            Statement statement = connection.createStatement();
-            statement.execute(
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        statement.execute(
                      "SELECT dateTimeOfEnding FROM ElectionsTime"
             );
-            ResultSet result = statement.getResultSet();
+        ResultSet result = statement.getResultSet();
             if(result.next()){
                 String dateString = result.getString("dateTimeOfEnding");
                 LocalDateTime date = LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 return date;
             }
             throw new NoElectionsException("Время конца выборов не назначено");
-        }
+        
     }
 }

@@ -23,7 +23,8 @@ public class CandidateDAO {
     
     public static Candidate createCandidate(Candidate candidate) throws InvalidInsertException{
         
-        try (Connection connection = ConnectionUtil.getConnection()) {
+        try{
+            Connection connection = ConnectionUtil.getConnection();
             Statement statement = connection.createStatement();
             boolean hasResult = statement.execute(String.format(
                      "SELECT * FROM Candidates WHERE name = '%s'",
@@ -48,45 +49,44 @@ public class CandidateDAO {
         return candidate;
     }
     
-     public static Candidate findCandidate(String name) throws SQLException, NoSuchCandidateException{
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            Statement statement = connection.createStatement();
-            boolean hasResult = statement.execute(String.format(
+    public static Candidate findCandidate(String name) throws SQLException, NoSuchCandidateException{
+
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        boolean hasResult = statement.execute(String.format(
                     "SELECT * FROM Candidates WHERE name = '%s'",
                     name
-            ));
-            if (hasResult) {
-                ResultSet resultSet = statement.getResultSet();
-                if(resultSet.next()){ //Если в результате есть хотя бы одна строка с таким логином, она нам и нужна
-                    Candidate candidateResult = new Candidate(
+        ));
+        if (hasResult) {
+            ResultSet resultSet = statement.getResultSet();
+            if(resultSet.next()){ //Если в результате есть хотя бы одна строка с таким логином, она нам и нужна
+                Candidate candidateResult = new Candidate(
                             resultSet.getString("name"),
                             resultSet.getInt("yearOfBirth"),
                             resultSet.getString("placeOfLiving"),
                             resultSet.getString("party"),
                             resultSet.getString("information"),
                             resultSet.getInt("votes")
-                    );
-                    return candidateResult;
-                }
-
-                throw new NoSuchCandidateException("Такого кандидата нет: " + name, name);
+                );
+                return candidateResult;
             }
-            throw new SQLException();
+                throw new NoSuchCandidateException("Такого кандидата нет: " + name, name);
         }
+        throw new SQLException();
     }
     
     public static Candidate updateCandidate(Candidate candidate) throws SQLException, NoSuchCandidateException {
 
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            Statement statement = connection.createStatement();
-            boolean hasResult = statement.execute(String.format(
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        boolean hasResult = statement.execute(String.format(
                     "SELECT * FROM Candidates WHERE name = '%s'",
                     candidate.getName()
-            ));
-            if (hasResult) {
-                ResultSet resultSet = statement.getResultSet();
-                if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким именем, значит мы не можем обновить этого кандидата
-                    statement.execute(String.format(
+        ));
+        if (hasResult) {
+            ResultSet resultSet = statement.getResultSet();
+            if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким именем, значит мы не можем обновить этого кандидата
+                statement.execute(String.format(
                             "UPDATE Candidates SET name = '%s', yearOfBirth = '%s', placeOfLiving = '%s', party = '%s', information = '%s', votes = %d WHERE name = '%s'",
                             candidate.getName(),
                             candidate.getYearOfBirth(),
@@ -95,65 +95,61 @@ public class CandidateDAO {
                             candidate.getInformation(),
                             candidate.getVotes(),
                             candidate.getName()
-                    ));
-                    return candidate;
-                }
-                throw new NoSuchCandidateException("Такого кандидата нет: " + candidate.getName(), candidate.getName());
+                ));
+                return candidate;
             }
-            throw new SQLException();
+            throw new NoSuchCandidateException("Такого кандидата нет: " + candidate.getName(), candidate.getName());
         }
+        throw new SQLException();
     }
     
     public static void voteForCandidate(Candidate candidate) throws SQLException, NoSuchCandidateException {
 
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            Statement statement = connection.createStatement();
-            boolean hasResult = statement.execute(String.format(
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        boolean hasResult = statement.execute(String.format(
                      "SELECT * FROM Candidates WHERE name = '%s'",
                     candidate.getName()
-            ));
-            if (hasResult) {
-                ResultSet resultSet = statement.getResultSet();
-                if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким именем, значит мы можем обновить этого кандидата
-                    statement.execute(String.format(
+        ));
+        if (hasResult) {
+            ResultSet resultSet = statement.getResultSet();
+            if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким именем, значит мы можем обновить этого кандидата
+                statement.execute(String.format(
                             "UPDATE Candidates SET votes = votes + 1 WHERE name = '%s'",
                             candidate.getName()
-                    ));
-                } else
-                    throw new NoSuchCandidateException("Такого кандидата нет: " + candidate.getName(), candidate.getName());
+                ));
             } else
-                throw new SQLException();
-        }
+                throw new NoSuchCandidateException("Такого кандидата нет: " + candidate.getName(), candidate.getName());
+        } else
+            throw new SQLException();
     }
     
     public static HashSet<Candidate> getCandidates() throws NoCandidatesException, SQLException{
            
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            Statement statement = connection.createStatement();
-            boolean hasResult = statement.execute(
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        boolean hasResult = statement.execute(
                     "SELECT * FROM Candidates "
-            );
-            if (hasResult) {
-                HashSet<Candidate> candidates = new HashSet();
-                ResultSet resultSet = statement.getResultSet();
-                boolean flg = false;
-                while (resultSet.next()) {//Если в результате есть хотя бы одна строка, значит кандидаты есть.
-                    flg = true;
-                    candidates.add(new Candidate(
+        );
+        if (hasResult) {
+            HashSet<Candidate> candidates = new HashSet();
+            ResultSet resultSet = statement.getResultSet();
+            boolean flg = false;
+            while (resultSet.next()) {//Если в результате есть хотя бы одна строка, значит кандидаты есть.
+                flg = true;
+                candidates.add(new Candidate(
                             resultSet.getString("name"),
                             resultSet.getInt("yearOfBirth"),
                             resultSet.getString("placeOfLiving"),
                             resultSet.getString("party"),
                             resultSet.getString("information"),
                             resultSet.getInt("votes")
-                    ));
-                }
-                if(!flg)
-                    throw new NoCandidatesException("Кандидатов нет.");
-                else return candidates;
+                ));
             }
-            throw new SQLException();
+            if(!flg)
+                throw new NoCandidatesException("Кандидатов нет.");
+            else return candidates;
         }
-    }
-    
+        throw new SQLException();
+    } 
 }

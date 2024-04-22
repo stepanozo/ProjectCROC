@@ -48,6 +48,7 @@ public class Waiter implements Runnable {
             Elections.setCandidates(CandidateDAO.getCandidates());
             if(Elections.getVoteFrame() != null){
                 new ElectionsResultFrame().setVisible(true);
+                Elections.getVoteFrame().setMustCloseConnection(false);
                 Elections.getVoteFrame().dispose();
                 if(Elections.getCandidateFrame() != null)
                     Elections.getCandidateFrame().dispose();
@@ -56,13 +57,9 @@ public class Waiter implements Runnable {
             }
 
         } catch(NoCandidatesException e){
-            InfoFrame infoFrame = new InfoFrame();
-            infoFrame.setErrorLabel(e.getMessage());
-            infoFrame.setVisible(true);
+            MainClass.showInfoFrame(e.getMessage());
         } catch(SQLException e){
-            InfoFrame infoFrame = new InfoFrame();
-            infoFrame.setErrorLabel("Ошибка SQL.");
-            infoFrame.setVisible(true);
+            MainClass.showInfoFrame("Ошибка SQL");
         }
     }
 }

@@ -4,6 +4,7 @@
  */
 package individualProjectPack.Frames;
 
+import individualProjectPack.ConnectionUtil;
 import individualProjectPack.DAO.UserDAO;
 import individualProjectPack.Elections;
 import individualProjectPack.MainClass;
@@ -19,6 +20,7 @@ import javax.swing.JLabel;
 public class ElectionsResultFrame extends javax.swing.JFrame {
     private final int MAX_CANDIDATES = 8;
     private JLabel[] labelArray;
+    private boolean mustCloseConnection;
     
     /**
      * Creates new form ElectionsResultFrame
@@ -26,6 +28,7 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
     public ElectionsResultFrame() {
         setLocationRelativeTo(null);
         initComponents();
+        mustCloseConnection = true;
         labelArray = new JLabel[]{
         jLabel0,
         jLabel1,
@@ -74,6 +77,11 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         backButton.setText("Назад");
         backButton.addActionListener(new java.awt.event.ActionListener() {
@@ -153,6 +161,8 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        
+        mustCloseConnection = false;
         try{
             if(UserDAO.checkIfAdmin(MainClass.getMyLogin())){
                 new AdminFrame().setVisible(true);
@@ -168,6 +178,13 @@ public class ElectionsResultFrame extends javax.swing.JFrame {
             dispose();
         }
     }//GEN-LAST:event_backButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        try{
+            if(mustCloseConnection)
+                ConnectionUtil.closeConnection();
+        } catch (SQLException e) {MainClass.showInfoFrame("Не удалось закрыть соединение");}
+    }//GEN-LAST:event_formWindowClosed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backButton;
