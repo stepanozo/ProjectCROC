@@ -6,6 +6,8 @@ package individualProjectPack.TableClasses;
 
 import individualProjectPack.Exceptions.*;
 import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.File;
 import java.io.BufferedReader;
 import java.util.*;
@@ -58,7 +60,7 @@ public class Candidate {
         if(!file.exists())
             throw new UnableToReadFileException("Такого файла не существует: ", new File(path).getName());
         
-        try( BufferedReader r = new BufferedReader(new FileReader(path))){
+        try( BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"))){
             String name = r.readLine();
             int yearOfBirth = Integer.parseInt(r.readLine());
             String placeOfLiving = r.readLine();
