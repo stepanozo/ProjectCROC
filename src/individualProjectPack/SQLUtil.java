@@ -24,10 +24,11 @@ public class SQLUtil {
                 statement.execute(
                      "TRUNCATE TABLE ElectionsTime "      
                     );
-                statement.execute(String.format( "INSERT INTO ElectionsTime VALUES ('%s', '%s'); ",
-                       beginTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                       endTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-               ));
+                String sql = "INSERT INTO ElectionsTime VALUES (?, ?); ";
+                PreparedStatement pStatement = connection.prepareStatement(sql);
+                pStatement.setString(1, beginTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                pStatement.setString(2, endTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                pStatement.execute();
         }catch (SQLException E){
             throw new InvalidInsertException("Не удалось добавить новое время выборов");
         }

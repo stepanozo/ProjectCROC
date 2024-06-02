@@ -25,23 +25,22 @@ public class CandidateDAO {
         
         try{
             Connection connection = ConnectionUtil.getConnection();
-            Statement statement = connection.createStatement();
-            boolean hasResult = statement.execute(String.format(
-                     "SELECT * FROM Candidates WHERE name = '%s'",
-                            candidate.getName()
-                    ));
+            String sql = "SELECT * FROM Candidates WHERE name = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, candidate.getName());
+            boolean hasResult = statement.execute();
             if (hasResult) {
                 ResultSet resultSet = statement.getResultSet();
                 if(resultSet.next()) //Если в результате есть хотя бы одна строка с таким именем, значит мы не можем добавить этого кандидата
                     throw new InvalidInsertException("Такой кандидат уже зарегистрирован: " + candidate.getName());
-
-               statement.execute(String.format( "INSERT INTO Candidates VALUES ('%s', %d, '%s', '%s', '%s', 0); ",
-                       candidate.getName(),
-                       candidate.getYearOfBirth(),
-                       candidate.getPlaceOfLiving(),
-                       candidate.getParty(),
-                       candidate.getInformation()
-               ));
+                sql = "INSERT INTO Candidates VALUES (?, ?, ?, ?, ?, 0); ";               
+                statement = connection.prepareStatement(sql);
+                statement.setString(1, candidate.getName());
+                statement.setInt(2, candidate.getYearOfBirth());
+                statement.setString(3, candidate.getPlaceOfLiving());
+                statement.setString(4, candidate.getParty());
+                statement.setString(5, candidate.getInformation());    
+                statement.execute();
             } else throw new SQLException();
         }catch (SQLException E){
             throw new InvalidInsertException("Не удалось добавить кандидата в таблицу");
@@ -52,11 +51,10 @@ public class CandidateDAO {
     public static Candidate findCandidate(String name) throws SQLException, NoSuchCandidateException{
 
         Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
-        boolean hasResult = statement.execute(String.format(
-                    "SELECT * FROM Candidates WHERE name = '%s'",
-                    name
-        ));
+        String sql = "SELECT * FROM Candidates WHERE name = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, name);
+        boolean hasResult = statement.execute();
         if (hasResult) {
             ResultSet resultSet = statement.getResultSet();
             if(resultSet.next()){ //Если в результате есть хотя бы одна строка с таким логином, она нам и нужна
@@ -78,24 +76,23 @@ public class CandidateDAO {
     public static Candidate updateCandidate(Candidate candidate) throws SQLException, NoSuchCandidateException {
 
         Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
-        boolean hasResult = statement.execute(String.format(
-                    "SELECT * FROM Candidates WHERE name = '%s'",
-                    candidate.getName()
-        ));
+        String sql =  "SELECT * FROM Candidates WHERE name = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, candidate.getName());
+        boolean hasResult = statement.execute();
         if (hasResult) {
             ResultSet resultSet = statement.getResultSet();
             if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким именем, значит мы не можем обновить этого кандидата
-                statement.execute(String.format(
-                            "UPDATE Candidates SET name = '%s', yearOfBirth = '%s', placeOfLiving = '%s', party = '%s', information = '%s', votes = %d WHERE name = '%s'",
-                            candidate.getName(),
-                            candidate.getYearOfBirth(),
-                            candidate.getPlaceOfLiving(),
-                            candidate.getParty(),
-                            candidate.getInformation(),
-                            candidate.getVotes(),
-                            candidate.getName()
-                ));
+                sql = "UPDATE Candidates SET name = ?, yearOfBirth = ?, placeOfLiving = ?, party = ?, information = ?, votes = ? WHERE name = ?";
+                statement = connection.prepareStatement(sql);
+                statement.setString(1, candidate.getName());
+                statement.setInt(2, candidate.getYearOfBirth());
+                statement.setString(3, candidate.getPlaceOfLiving());
+                statement.setString(4, candidate.getParty());
+                statement.setString(5, candidate.getInformation());
+                statement.setInt(6, candidate.getVotes());
+                statement.setString(7, candidate.getName());
+                statement.execute();
                 return candidate;
             }
             throw new NoSuchCandidateException("Такого кандидата нет: " + candidate.getName(), candidate.getName());
@@ -106,18 +103,17 @@ public class CandidateDAO {
     public static void voteForCandidate(Candidate candidate) throws SQLException, NoSuchCandidateException {
 
         Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
-        boolean hasResult = statement.execute(String.format(
-                     "SELECT * FROM Candidates WHERE name = '%s'",
-                    candidate.getName()
-        ));
+        String sql = "SELECT * FROM Candidates WHERE name = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, candidate.getName());
+        boolean hasResult = statement.execute();
         if (hasResult) {
             ResultSet resultSet = statement.getResultSet();
             if(resultSet.next()) {//Если в результате есть хотя бы одна строка с таким именем, значит мы можем обновить этого кандидата
-                statement.execute(String.format(
-                            "UPDATE Candidates SET votes = votes + 1 WHERE name = '%s'",
-                            candidate.getName()
-                ));
+                sql = "UPDATE Candidates SET votes = votes + 1 WHERE name = ?";
+                statement = connection.prepareStatement(sql);
+                statement.setString(1, candidate.getName());
+                statement.execute();
             } else
                 throw new NoSuchCandidateException("Такого кандидата нет: " + candidate.getName(), candidate.getName());
         } else
